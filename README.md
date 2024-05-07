@@ -1,5 +1,6 @@
-# DoppleDashboard
+# DoppleDashboard Extend
 Dopple dashboard system is working for Dopple to display their necessary information, this project build by Group IT2G, from NHL Stenden.
+This is the extend version besed on first phase.
 ## Setup Project
 Please install dependencies for "dopple" and "Backend" folder before you start project:
 ```
