@@ -240,3 +240,22 @@
 .cmaeraViewText {
   padding-left: 10px;
 }
+.border-animation {
+  position: absolute;
+  width: calc(100% + 10px); /* Adjust width for border size */
+  height: calc(100% + 10px); /* Adjust height for border size */
+  top: -5px; /* Adjust top position to center border */
+  left: -5px; /* Adjust left position to center border */
+  border: 5px solid green; /* Border style and color */
+  border-radius: 10px; /* Adjust border radius */
+  animation: border-pulse 1s infinite alternate; /* Border animation */
+}
+
+@keyframes border-pulse {
+  from {
+    border-color: transparent;
+  }
+  to {
+    border-color: green;
+  }
+}
