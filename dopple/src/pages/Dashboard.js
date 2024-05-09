@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState  } from "react";
 import "./Dashboard.css";
 import DoppleHeader from "../components/DoppleHeader";
 import printersLogo from "../assets/3dPrinters.png";
 import servicesLogo from "../assets/server.png";
 import mqtt from "mqtt";
-import ReactPlayer from "react-player";
+import { RCTFlvPlayerView } from 'react-native-flv';
+
 
 const Dashboard = () => {
   const [printerData, setPrinterData] = useState([]);
@@ -142,13 +143,34 @@ const Dashboard = () => {
   };
 
   const streams = [
-    "http://localhost:3003/cams/cam1-videos/index.m3u8",
-    "http://localhost:3003/cams/cam6-videos/index.m3u8", // I added dummy links
-    "http://localhost:3003/cams/cam6-videos/index.m3u8", // I added dummy links
-    "http://localhost:3003/cams/cam6-videos/index.m3u8", // I added dummy links
-    "http://localhost:3003/cams/cam6-videos/index.m3u8", // I added dummy links
-    "http://localhost:3003/cams/cam6-videos/index.m3u8", // I added dummy links
+    "http://xxx/xxx/xxx.flv",
+    "http://xxx/xxx/xxx.flv", // I added dummy links
+    "http://xxx/xxx/xxx.flv", // I added dummy links
+    "http://xxx/xxx/xxx.flv", // I added dummy links
+    "http://xxx/xxx/xxx.flv", // I added dummy links
+    "http://xxx/xxx/xxx.flv", // I added dummy links
   ];
+
+  // temporary used for zooming function
+  const handleFrontDoorRing = () => {
+    setIsZoomed(true);
+    setIsBorderAnimating(true);
+    setTimeout(() => {
+    setIsZoomed(false);
+    setTimeout(() => {
+      setIsBorderAnimating(false);
+    }, 1000); // Delay border animation reset by 1 second
+  }, 15000);
+  };
+
+  
+    // Function to handle API request or link click
+    const handleZoomTrigger = () => {
+      // Example: Make an API request or handle link click
+      // When triggered, call handleFrontDoorRing to activate zoom
+      handleFrontDoorRing();
+    };
+  
   return (
     <div className="dashboard-container">
       <DoppleHeader />
@@ -158,17 +180,16 @@ const Dashboard = () => {
       <div className="content">
         <div id="cameraFeeds">
           <div className="camera-grid">
-            {streams.map((streamUrl, index) => (
+          {streams.map((streamUrl, index) => (
               <div className="camera" key={index}>
                 <div className="react-player-wrapper">
-                  <ReactPlayer
+                  <RCTFlvPlayerView
+                    style={{ width: '100%', height: '100%' }}
                     url={streamUrl}
-                    playing
-                    controls
-                    width="100%"
-                    height="100%"
-                    muted={true}
+                    enableBackground={false}
+                    zoom={isZoomed ? 2 : 1}
                   />
+                  {isBorderAnimating && <div className="border-animation"></div>}
                 </div>
               </div>
             ))}
@@ -230,7 +251,7 @@ const Dashboard = () => {
                   <div className="columnOrderStatus">{toHump(key)}</div>
                 </td>
               </tr>
-            ))}
+            ))};
           </table>
         </div>
         <div id="networkServices">
@@ -243,9 +264,9 @@ const Dashboard = () => {
           </h3>
           <div className="networkFlow">{networkServiceData}</div>
         </div>
+        <button onClick={handleZoomTrigger}>Trigger Zoom</button>
       </div>
     </div>
   );
 };
-
 export default Dashboard;
