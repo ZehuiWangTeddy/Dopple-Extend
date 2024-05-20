@@ -4,6 +4,7 @@
 /node_modules
 dopple/*/node_modules/
 Backend/*/node_modules/
+dopple/node_modules/.cache/default-development/*.pack
 /.pnp
 .pnp.js
 
