@@ -1,7 +1,11 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import DashboardContext from './DashboardContext';
 
 const DashhboardContextProvider = ({ children }) => {
+
+    const [printerLoading, setPrinterLoading] = useState(true);
+    const [orderLoading, setOrderLoading] = useState(true);
+    const [networkServiceLoading, setNetworkServiceLoading] = useState(true);
 
     const [printerData, setPrinterData] = useState([]);
     const [orderData, setOrderData] = useState({});
@@ -17,6 +21,7 @@ const DashhboardContextProvider = ({ children }) => {
     const statusData = [created, locked, confirmed, inProduction, shipped, completed];
 
     useEffect(() => {
+
         const SERVER_HOST = process.env.REACT_APP_BASHBOARD_API_URL;
 
         const serviceStatusLabel = (status) => {
@@ -81,8 +86,16 @@ const DashhboardContextProvider = ({ children }) => {
         }
 
         const es = new EventSource(SERVER_HOST);
-        es.onopen = () => console.log(">>> Connection opened!");
-        es.onerror = (e) => console.log("ERROR!", e);
+        es.onopen = () => {
+            console.log(">>> Connection opened!");
+            // setLoading(false);
+        };
+        es.onerror = (e) => {
+            console.log("ERROR!", e);
+            setOrderLoading(true);
+            setPrinterLoading(true);
+            setNetworkServiceLoading(true);
+        }
 
         es.addEventListener("mqtt_message", (e) => {
             const body = JSON.parse(e.data);
@@ -97,12 +110,15 @@ const DashhboardContextProvider = ({ children }) => {
 
             if (type === "PRADA") {
                 parsePrinterData(data);
+                setPrinterLoading(false);
             }
             if (type === "ORDER-PORTAL") {
                 parseOrderData(data);
+                setOrderLoading(false);
             }
             if (type === 'STATUS-REPORTER') {
                 parseNetworkServiceData(data);
+                setNetworkServiceLoading(false);
             }
         });
 
@@ -111,7 +127,7 @@ const DashhboardContextProvider = ({ children }) => {
     }, []);
 
     return (
-        <DashboardContext.Provider value={{ printerData, orderData, networkServiceData, companyData, statusData }}>
+        <DashboardContext.Provider value={{ printerData, orderData, networkServiceData, companyData, statusData, orderLoading, networkServiceLoading, printerLoading }}>
             {children}
         </DashboardContext.Provider>
     );

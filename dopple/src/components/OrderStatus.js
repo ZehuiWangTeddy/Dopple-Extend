@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
 
 import DashboardContext from '../contexts/DashboardContext';
+import DoppleLoader from './DoppleLoader';
 
 const OrderStatus = () => {
-    const { companyData, statusData, orderData } = useContext(DashboardContext);
+    const { orderLoading, companyData, statusData, orderData } = useContext(DashboardContext);
 
     const toHump = (name) => {
         return name.replace(/_(\w)/g, function (all, letter) {
@@ -29,6 +30,7 @@ const OrderStatus = () => {
         if (companyData.length === 0) {
             return 
         }
+
         return statusData.map((key, index) => (
             <tr key={index} className='statusLast'>
                 {companyData.map((company) => (
@@ -43,14 +45,22 @@ const OrderStatus = () => {
         ))
     }
 
-return (
-    <div id="orderStatus">
-        <table>
+    function getContent() {
+        if (orderLoading) {
+            return <DoppleLoader />
+        }
+
+        return <table>
             <tbody>
-                {getTableBody() }
+                { getTableBody() }
                 { getOrderData() }
             </tbody>
         </table>
+    }
+
+return (
+    <div id="orderStatus">
+        { getContent() }
     </div>
 )
 }
