@@ -20,7 +20,8 @@ let looper_timeout = null;
  * Frequency at which dashboard updates should be published.
  * Unit is in seconds
  */
-const DASHBOARD_FREQUENCY = 300;
+// const DASHBOARD_FREQUENCY = 300;
+const DASHBOARD_FREQUENCY = 10;
 
 /**
  * Change this to connect to a different server
