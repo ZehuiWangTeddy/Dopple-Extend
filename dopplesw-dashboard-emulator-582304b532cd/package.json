@@ -7,6 +7,6 @@
     "start": "node --es-module-specifier-resolution=node --no-warnings ."
   },
   "dependencies": {
-    "mqtt": "^5.3.6"
+    "mqtt": "^5.6.0"
   }
 }
