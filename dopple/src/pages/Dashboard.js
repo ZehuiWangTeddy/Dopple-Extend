@@ -14,7 +14,7 @@ const Dashboard = () => {
     <DashhboardContextProvider>
     <div className="dashboard-container">
       <DoppleHeader />
-      <div className="content"> 
+      <div className="content">
         <div id="cameraFeeds"> 
            <CameraFeeds />
         </div>
