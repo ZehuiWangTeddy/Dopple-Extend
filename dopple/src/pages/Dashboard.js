@@ -6,7 +6,6 @@ import OrderStatus from '../components/OrderStatus';
 import DashhboardContextProvider from '../contexts/DashboardContextProvider';
 import NetworkStatus from '../components/NetworkStatus';
 import CameraFeeds from '../components/cams/CameraFeeds'; 
-import mqtt from 'mqtt';
 
 
 const Dashboard = () => {
@@ -15,7 +14,7 @@ const Dashboard = () => {
     <DashhboardContextProvider>
     <div className="dashboard-container">
       <DoppleHeader />
-      <div className="content"> 
+      <div className="content">
         <div id="cameraFeeds"> 
            <CameraFeeds />
         </div>

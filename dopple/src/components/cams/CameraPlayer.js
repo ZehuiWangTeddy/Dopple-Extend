@@ -44,7 +44,7 @@ const CameraPlayer = ({ url }) => {
   }, [url]);
 
   return (
-    <div style={{ position: 'relative', width: '300px', height: '300px' }}>
+    <div style={{ position: 'relative', width: '300px', height: '280px' }}>
       {loading && (
         <div style={{
           position: 'absolute',
@@ -58,7 +58,7 @@ const CameraPlayer = ({ url }) => {
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
           zIndex: 2,
         }}>
-          <img src={doppleLogo} alt="Loading" style={{ width: '100px', height: '100px' }} />
+          <img src={doppleLogo} alt="Loading" style={{ width: '50px', height: '50px' }} />
         </div>
       )}
       <video 
