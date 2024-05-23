@@ -295,3 +295,8 @@
   padding: 8px;
   text-align: center;
 }
+
+button{
+  background-color: none;
+  border: none;
+}

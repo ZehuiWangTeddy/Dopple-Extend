@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import "./Dashboard.css";
+import "./SecondPage.css";
 import DoppleHeader from "../components/DoppleHeader";
 import printersLogo from "../assets/3dPrinters.png";
 import servicesLogo from "../assets/server.png";
+import Back from "../assets/Back.png";
 import mqtt from "mqtt";
 import ReactPlayer from "react-player";
 
-const Dashboard = () => {
+const SecondPage = () => {
   const [printerData, setPrinterData] = useState([]);
   const [orderData, setOrderData] = useState([]);
   const [networkServiceData, setNetworkServiceData] = useState([]);
@@ -233,8 +234,14 @@ const Dashboard = () => {
           <div className="networkFlow">{networkServiceData}</div>
         </div>
       </div>
+      <button href="#">
+        <img
+          src={Back}
+          alt="Arrow for the previous page"
+        />
+      </button>
     </div>
   );
 };
 
-export default Dashboard;
+export default SecondPage;
