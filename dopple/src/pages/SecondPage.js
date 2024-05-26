@@ -5,7 +5,7 @@ import printersLogo from "../assets/3dPrinters.png";
 import servicesLogo from "../assets/server.png";
 import Back from "../assets/Back.png";
 import mqtt from "mqtt";
-import ReactPlayer from "react-player";
+// import ReactPlayer from "react-player";
 
 const SecondPage = () => {
   const [printerData, setPrinterData] = useState([]);
@@ -142,14 +142,14 @@ const SecondPage = () => {
     }
   };
 
-  const streams = [
-    "http://localhost:3003/cams/cam1-videos/index.m3u8",
-    "http://localhost:3003/cams/cam6-videos/index.m3u8", // I added dummy links
-    "http://localhost:3003/cams/cam6-videos/index.m3u8", // I added dummy links
-    "http://localhost:3003/cams/cam6-videos/index.m3u8", // I added dummy links
-    "http://localhost:3003/cams/cam6-videos/index.m3u8", // I added dummy links
-    "http://localhost:3003/cams/cam6-videos/index.m3u8", // I added dummy links
-  ];
+  // const streams = [
+  //   "http://localhost:3003/cams/cam1-videos/index.m3u8",
+  //   "http://localhost:3003/cams/cam6-videos/index.m3u8", // I added dummy links
+  //   "http://localhost:3003/cams/cam6-videos/index.m3u8", // I added dummy links
+  //   "http://localhost:3003/cams/cam6-videos/index.m3u8", // I added dummy links
+  //   "http://localhost:3003/cams/cam6-videos/index.m3u8", // I added dummy links
+  //   "http://localhost:3003/cams/cam6-videos/index.m3u8", // I added dummy links
+  // ];
   return (
     <div className="dashboard-container">
       <DoppleHeader />
