@@ -6,7 +6,6 @@ import OrderStatus from '../components/OrderStatus';
 import DashhboardContextProvider from '../contexts/DashboardContextProvider';
 import NetworkStatus from '../components/NetworkStatus';
 import Back from "../assets/Back.png";
-// import ReactPlayer from "react-player";
 
 const SecondPage = () => {
   return (
@@ -30,11 +29,11 @@ const SecondPage = () => {
       </div>
     </div>
     <button href="#">
-        <img
-          src={Back}
-          alt="Arrow for the previous page"
-        />
-      </button>
+      <img
+        src={Back}
+        alt="Arrow for the previous page"
+      />
+    </button>
     </DashhboardContextProvider>
   );
 };
