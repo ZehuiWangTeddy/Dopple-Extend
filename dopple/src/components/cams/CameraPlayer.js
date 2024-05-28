@@ -44,7 +44,7 @@ const CameraPlayer = ({ url }) => {
   }, [url]);
 
   return (
-    <div style={{ position: 'relative', width: '300px', height: '280px' }}>
+    <div style={{ position: 'relative', width: '400px', height: '280px' }}>
       {loading && (
         <div style={{
           position: 'absolute',
