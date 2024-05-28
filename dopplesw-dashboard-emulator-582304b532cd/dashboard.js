@@ -83,6 +83,13 @@ const SERVICES = [
         ]
     },
     {
+        key: "DOORBELL",
+        name: "Doorbell",
+        keys: [
+            { name: "doorbell_status", type: "string" }
+        ]
+    },
+    {
         key: "GATEKEEPER",
         name: "Dopple Access Controller",
         keys: [
@@ -120,6 +127,7 @@ const loopFunction = async () => {
 
         const PRINTER_STATUS_STRINGS = ["PRINTING", "FREE"]
         const SERVICE_STATUS_STRINGS = ["ONLINE", "OFFLINE", "WARNING"]
+        const DOORBELL_STATUS_STRINGS = ["PRESSED","IDLE"]
 
         // Loop through all the given keys.
         for (let key of keys) {
@@ -136,6 +144,9 @@ const loopFunction = async () => {
                     }
                     else if (key.name.includes("service")) {
                         packet.values[key.name] = SERVICE_STATUS_STRINGS[Math.floor(Math.random() * SERVICE_STATUS_STRINGS.length)];
+                    }
+                    else if (key.name === "doorbell_status") {
+                        packet.values[key.name] = DOORBELL_STATUS_STRINGS[Math.floor(Math.random() * DOORBELL_STATUS_STRINGS.length)];
                     }
                     else {
                         packet.values[key.name] = names[Math.floor(Math.random() * names.length)];
@@ -348,5 +359,14 @@ function logtime() {
         hour12: false
     }) + "]>"
 }
+
+for (let service of SERVICES) {
+    client.subscribe('tailor/' + service.key + "/dashboard");
+}
+
+// MQTT Event -> OnMessage
+client.on('message', (topic, message) => {
+    console.log('Received message on topic:', topic, '->', message.toString());
+});
 
 exitController()
