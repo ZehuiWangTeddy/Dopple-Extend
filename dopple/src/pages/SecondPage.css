@@ -254,7 +254,21 @@
   text-align: center;
 }
 
-button{
-  background-color: none;
+.button-container {
+  padding: 20px 10px;
+}
+
+.previous-page-button {
+  width: 150px;
+  height: 55px;
+  font-size: 20px;
+  color: #fff;
+  background-color: #5d6f80;
   border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.previous-page-button:hover {
+  background-color: #33363F;
 }
