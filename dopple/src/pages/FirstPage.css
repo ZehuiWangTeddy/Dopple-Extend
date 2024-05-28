@@ -6,8 +6,7 @@
 }
 
 .cameraViewText {
-    text-align: center;
-    margin: 0px 0;
+    margin: 0 20px;
 }
 
 .content {
@@ -16,13 +15,14 @@
     align-items: center;
     margin: 10px;
     height: 100%;
+    background-color: #5d6f80;
 }
 
 .cameraFeeds {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #5d6f80;
+    
     border-radius: 10px;
     height: 100%;
     width: 100%;
@@ -34,9 +34,10 @@
     justify-content: center;
     gap: 100px;
     margin-top: 30px;
+    padding-bottom: 30px;
 }
-  
-.open-door-button {
+
+.open-door-button, .next-page-button {
     width: 150px;
     height: 55px;
     font-size: 20px;
@@ -47,6 +48,6 @@
     cursor: pointer;
 }
   
-.open-door-button:hover {
+.open-door-button:hover, .next-page-button:hover {
     background-color: #33363F;
 }
