@@ -24,19 +24,6 @@ const doorbells = [
     // Add more doorbells here as needed
 ];
 
-client.on('connect', function () {
-    doorbells.forEach(doorbell => {
-        const topic = `dopple_access/ringers/${doorbell}/doorbell`;
-        client.subscribe(topic, function (err) {
-            if (err) {
-                console.error(`Error subscribing to ${doorbell} topic:`, err);
-            } else {
-                console.log(`Subscribed to ${doorbell} topic`);
-            }
-        });
-    });
-});
-
 // Callback function for successful MQTT connection
 client.on('connect', function () {
     console.log('Connected to MQTT broker');
@@ -62,6 +49,16 @@ client.on('connect', function () {
             console.log('Subscribed to STATUS-REPORTER');
 
         }
+    });
+    doorbells.forEach(doorbell => {
+        const topic = `dopple_access/ringers/${doorbell}/doorbell`;
+        client.subscribe(topic, function (err) {
+            if (err) {
+                console.error(`Error subscribing to ${doorbell} topic:`, err);
+            } else {
+                console.log(`Subscribed to ${doorbell} topic`);
+            }
+        });
     });
 });
 
