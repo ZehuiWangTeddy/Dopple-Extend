@@ -17,6 +17,8 @@ const client = mqtt.connect(mqttUrl, {
     clientId: 'dopple-dashboard-client'
 });
 
+
+
 // Callback function for successful MQTT connection
 client.on('connect', function () {
     console.log('Connected to MQTT broker');
