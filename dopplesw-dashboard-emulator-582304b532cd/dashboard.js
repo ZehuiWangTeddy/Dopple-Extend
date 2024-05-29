@@ -15,14 +15,12 @@ let mqtt_connected = false;
  * Gets the javascript timeout object so we can cancel the next looper call.
  */
 let looper_timeout = null;
-let door_looper_timeout = null;
 
 /**
  * Frequency at which dashboard updates should be published.
  * Unit is in seconds
  */
-const DASHBOARD_FREQUENCY = 30;
-const CAMERA_FREQUENCY = 20; // recommended 20 seconds, since doorbell notification stays active for 15 seconds when pressed in real life
+const DASHBOARD_FREQUENCY = 300;
 
 /**
  * Change this to connect to a different server
@@ -83,13 +81,6 @@ const SERVICES = [
         ]
     },
     {
-        key: "DOORBELL",
-        name: "Doorbell",
-        keys: [
-            { name: "doorbell_status", type: "string" }
-        ]
-    },
-    {
         key: "GATEKEEPER",
         name: "Dopple Access Controller",
         keys: [
@@ -127,7 +118,6 @@ const loopFunction = async () => {
 
         const PRINTER_STATUS_STRINGS = ["PRINTING", "FREE"]
         const SERVICE_STATUS_STRINGS = ["ONLINE", "OFFLINE", "WARNING"]
-        const DOORBELL_STATUS_STRINGS = ["PRESSED","IDLE"]
 
         // Loop through all the given keys.
         for (let key of keys) {
@@ -139,19 +129,16 @@ const loopFunction = async () => {
                     packet.values[key.name] = Math.round(Math.random() * 1000)
                     break;
                 case "string":
-                    if (key.name.includes("print")) {
+                    if(key.name.includes("print")) {
                         packet.values[key.name] = PRINTER_STATUS_STRINGS[Math.floor(Math.random() * PRINTER_STATUS_STRINGS.length)];
                     }
                     else if (key.name.includes("service")) {
                         packet.values[key.name] = SERVICE_STATUS_STRINGS[Math.floor(Math.random() * SERVICE_STATUS_STRINGS.length)];
                     }
-                    else if (key.name === "doorbell_status") {
-                        packet.values[key.name] = DOORBELL_STATUS_STRINGS[Math.floor(Math.random() * DOORBELL_STATUS_STRINGS.length)];
-                    }
                     else {
                         packet.values[key.name] = names[Math.floor(Math.random() * names.length)];
                     }
-
+                    
                     break;
                 case "list":
                     packet.values[key.name] = [];
@@ -167,68 +154,6 @@ const loopFunction = async () => {
         await client.publishAsync('tailor/' + service.key + "/dashboard", JSON.stringify(packet), {
             retain: true
         });
-    }
-}
-
-const doorFunctionInitToOff = async () => {
-    const doorbells = [
-        "deurbel_voordeur",
-        "deurbel_achterdeur"
-    ]
-
-    const motionCamera = [
-        "parkeerplaats_achter",
-        "deurbel_voordeur",
-        "hal",
-        "hal_lift",
-        "deurbel_achterdeur"
-    ]
-
-    // write all doorbells to off
-    for (const bel of doorbells) {
-        await client.publishAsync(`dopple_access/ringers/${bel}/doorbell`, "OFF");
-    }
-
-    // write all camera motion to off.
-    for (const camera of motionCamera) {
-        await client.publishAsync(`dopple_access/cameras/${camera}/motion`, "OFF");
-    }
-}
-
-const loopDoorUpdateFunction = async () => {
-    const doorbells = [
-        "deurbel_voordeur",
-        "deurbel_achterdeur"
-    ]
-
-    const motionCamera = [
-        "parkeerplaats_achter",
-        "deurbel_voordeur",
-        "hal",
-        "hal_lift",
-        "deurbel_achterdeur"
-    ]
-
-    // Randomize the chance of ringing the doorbell
-    for (const bel of doorbells) {
-        const random = Math.floor(Math.random() * 100);
-        if (random % 5 === 0) {
-            await client.publishAsync(`dopple_access/ringers/${bel}/doorbell`, "ON");
-            setTimeout(async () => {
-                await client.publishAsync(`dopple_access/ringers/${bel}/doorbell`, "OFF");
-            }, 15 * 1000);
-        }
-    }
-
-    // randomize the chance of seeing motion on the camera's
-    for (const camera of motionCamera) {
-        const random = Math.floor(Math.random() * 50);
-        if (random % 5 === 0) {
-            await client.publishAsync(`dopple_access/cameras/${camera}/motion`, "ON");
-            setTimeout(async () => {
-                await client.publishAsync(`dopple_access/cameras/${camera}/motion`, "OFF");
-            }, 3 * 1000);
-        }
     }
 }
 
@@ -258,10 +183,6 @@ client.on('connect', (conn_packet) => {
 
     // Once connected -> start looper
     loopController()
-    doorFunctionInitToOff().then(() => {
-        // start looper
-        doorLooper();
-    })
 });
 
 /**
@@ -273,24 +194,12 @@ client.on('disconnect', (conn_packet) => {
     if (looper_timeout) {
         clearTimeout(looper_timeout);
     }
-    if (door_looper_timeout) {
-        clearTimeout(door_looper_timeout);
-    }
-
 });
 
 /**
  * Setup the Windows support for using CTRL+C as a way to safely exit the program
  */
 if (process.platform === "win32") {
-    // var rl = require("readline").createInterface({
-    //     input: process.stdin,
-    //     output: process.stdout
-    // });
-
-    // rl.on("SIGINT", function () {
-    //     process.emit("SIGINT");
-    // });
     import("readline").then(readline => {
         const rl = readline.createInterface({
             input: process.stdin,
@@ -328,17 +237,6 @@ const loopController = () => {
     }
 }
 
-const doorLooper = () => {
-    if (mqtt_connected) {
-
-        loopDoorUpdateFunction().catch((err) => {
-            console.log(logtime(), "DOOR_LOOPER_CRASHED", err.message)
-        }).finally(() => {
-            door_looper_timeout = setTimeout(doorLooper, CAMERA_FREQUENCY * 1000);
-        });
-    }
-}
-
 /**
  * Function that checks every 100ms if the code should exit.
  */
@@ -359,14 +257,5 @@ function logtime() {
         hour12: false
     }) + "]>"
 }
-
-for (let service of SERVICES) {
-    client.subscribe('tailor/' + service.key + "/dashboard");
-}
-
-// MQTT Event -> OnMessage
-client.on('message', (topic, message) => {
-    console.log('Received message on topic:', topic, '->', message.toString());
-});
 
 exitController()
