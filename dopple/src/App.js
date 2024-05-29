@@ -11,6 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<FirstPage />}/>
         <Route path="/stats" element={<SecondPage />}/>
+        {/* <Route path="/" element={<SecondPage />}/> */}
       </Routes>
     </BrowserRouter>
   );

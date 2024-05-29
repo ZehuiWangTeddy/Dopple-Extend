@@ -17,6 +17,13 @@ const client = mqtt.connect(mqttUrl, {
     clientId: 'dopple-dashboard-client'
 });
 
+// List of doorbells
+const doorbells = [
+    "deurbel_voordeur",
+    "deurbel_achterdeur",
+    // Add more doorbells here as needed
+];
+
 // Callback function for successful MQTT connection
 client.on('connect', function () {
     console.log('Connected to MQTT broker');
@@ -40,7 +47,18 @@ client.on('connect', function () {
             console.error('Error subscribing to topic2:', err);
         } else {
             console.log('Subscribed to STATUS-REPORTER');
+
         }
+    });
+    doorbells.forEach(doorbell => {
+        const topic = `dopple_access/ringers/${doorbell}/doorbell`;
+        client.subscribe(topic, function (err) {
+            if (err) {
+                console.error(`Error subscribing to ${doorbell} topic:`, err);
+            } else {
+                console.log(`Subscribed to ${doorbell} topic`);
+            }
+        });
     });
 });
 

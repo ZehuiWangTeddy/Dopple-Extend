@@ -18,7 +18,7 @@ const SecondPage = () => {
     <DashhboardContextProvider>
     <div className="dashboard-container">
       <DoppleHeader />
-      <div className="content">
+      <div className="second-content">
         <OrderStatus />
         <PrinterStatus />
         <div id="operatorStatus">
