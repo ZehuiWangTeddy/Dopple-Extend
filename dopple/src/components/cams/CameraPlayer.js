@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import doppleLogo from "../../assets/doppleLogo.png";
+import doppleLog from "../../assets/doppleLog.PNG";
 import './CameraFeeds.css';
 
 const loadScript = (src, callback) => {
@@ -58,7 +59,7 @@ const CameraPlayer = ({ url }) => {
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
           zIndex: 2,
         }}>
-          <img src={doppleLogo} alt="Loading" style={{ width: '50px', height: '50px' }} />
+          <img src={doppleLog} alt="Loading" style={{ width: '380px', height: '260px' }} />
         </div>
       )}
       <video 
