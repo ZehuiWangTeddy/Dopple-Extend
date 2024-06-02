@@ -48,18 +48,47 @@ const SERVICES = [
         key: "ORDER-PORTAL",
         name: "Order API",
         keys: [
+            { name: "total_orders_reduson-bv_created", type: "number" },
+            { name: "total_orders_reduson-bv_locked", type: "number" },
+            { name: "total_orders_reduson-bv_confirmed", type: "number" },
+            { name: "total_orders_reduson-bv_in_production", type: "number" },
+            { name: "total_orders_reduson-bv_shipped", type: "number" },
+            { name: "total_orders_reduson-bv_completed", type: "number" },
+
             { name: "total_orders_earsonly_created", type: "number" },
             { name: "total_orders_earsonly_locked", type: "number" },
             { name: "total_orders_earsonly_confirmed", type: "number" },
             { name: "total_orders_earsonly_in_production", type: "number" },
             { name: "total_orders_earsonly_shipped", type: "number" },
             { name: "total_orders_earsonly_completed", type: "number" },
-            { name: "total_orders_reduson_created", type: "number" },
-            { name: "total_orders_reduson_locked", type: "number" },
-            { name: "total_orders_reduson_confirmed", type: "number" },
-            { name: "total_orders_reduson_in_production", type: "number" },
-            { name: "total_orders_reduson_shipped", type: "number" },
-            { name: "total_orders_reduson_completed", type: "number" },
+
+            { name: "total_orders_demo-sales-tenant_created", type: "number" },
+            { name: "total_orders_demo-sales-tenant_locked", type: "number" },
+            { name: "total_orders_demo-sales-tenant_confirmed", type: "number" },
+            { name: "total_orders_demo-sales-tenant_in_production", type: "number" },
+            { name: "total_orders_demo-sales-tenant_shipped", type: "number" },
+            { name: "total_orders_demo-sales-tenant_completed", type: "number" },
+
+            { name: "total_orders_comfoor-bv_created", type: "number" },
+            { name: "total_orders_comfoor-bv_locked", type: "number" },
+            { name: "total_orders_comfoor-bv_confirmed", type: "number" },
+            { name: "total_orders_comfoor-bv_in_production", type: "number" },
+            { name: "total_orders_comfoor-bv_shipped", type: "number" },
+            { name: "total_orders_comfoor-bv_completed", type: "number" },
+
+            { name: "total_orders_elacin-international-bv_created", type: "number" },
+            { name: "total_orders_elacin-international-bv_locked", type: "number" },
+            { name: "total_orders_elacin-international-bv_confirmed", type: "number" },
+            { name: "total_orders_elacin-international-bv_in_production", type: "number" },
+            { name: "total_orders_elacin-international-bv_shipped", type: "number" },
+            { name: "total_orders_elacin-international-bv_completed", type: "number" },
+
+            { name: "total_orders_cotral-lab-france_created", type: "number" },
+            { name: "total_orders_cotral-lab-france_locked", type: "number" },
+            { name: "total_orders_cotral-lab-france_confirmed", type: "number" },
+            { name: "total_orders_cotral-lab-france_in_production", type: "number" },
+            { name: "total_orders_cotral-lab-france_shipped", type: "number" },
+            { name: "total_orders_cotral-lab-france_completed", type: "number" },
         ]
     },
     {
@@ -75,11 +104,18 @@ const SERVICES = [
         key: "STATUS-REPORTER",
         name: "Status Reporter",
         keys: [
-            { name: "service_1_status", type: "string" },
-            { name: "service_2_status", type: "string" },
-            { name: "service_3_status", type: "string" },
-            { name: "service_4_status", type: "string" },
-            { name: "service_5_status", type: "string" },
+            { name: "service_order-portal_status", type: "string" },
+            { name: "service_chisel-server_status", type: "string" },
+            { name: "service_exact-broker_status", type: "string" },
+            { name: "service_tassel_status", type: "string" },
+            { name: "service_reify-server_status", type: "string" },
+            { name: "service_prada_status", type: "string" },
+            { name: "service_xray_status", type: "string" },
+            { name: "service_chanel_status", type: "string" },
+            { name: "service_reify_status", type: "string" },
+            { name: "service_ribbon_status", type: "string" },
+            { name: "service_aglet_status", type: "string" },
+            { name: "service_new-earsonly_status", type: "string" },
         ]
     },
     {
@@ -136,7 +172,8 @@ const loopFunction = async () => {
                     }
                     else if (key.name.includes("service")) {
                         packet.values[key.name] = SERVICE_STATUS_STRINGS[Math.floor(Math.random() * SERVICE_STATUS_STRINGS.length)];
-                    } else {
+                    }
+                    else {
                         packet.values[key.name] = names[Math.floor(Math.random() * names.length)];
                     }
 
@@ -318,15 +355,14 @@ const loopController = () => {
 
 const doorLooper = () => {
     if (mqtt_connected) {
+
         loopDoorUpdateFunction().catch((err) => {
             console.log(logtime(), "DOOR_LOOPER_CRASHED", err.message)
         }).finally(() => {
-            // Change the timeout duration to 30 seconds
-            door_looper_timeout = setTimeout(doorLooper, 30 * 1000); // 30 seconds
+            door_looper_timeout = setTimeout(doorLooper, CAMERA_FREQUENCY * 1000);
         });
     }
 }
-
 
 /**
  * Function that checks every 100ms if the code should exit.
@@ -348,10 +384,5 @@ function logtime() {
         hour12: false
     }) + "]>"
 }
-
-for (let service of SERVICES) {
-    client.subscribe('tailor/' + service.key + "/dashboard");
-}
-
 
 exitController()
