@@ -5,9 +5,9 @@ import './CameraFeeds.css';
 
 const cameraUrls = [
   process.env.REACT_APP_CAMERA_FRONT,
-  process.env.REACT_APP_CAMERA_TEST,
-  process.env.REACT_APP_CAMERA_TEST,
-  process.env.REACT_APP_CAMERA_TEST,
+  process.env.REACT_APP_CAMERA_BACK,
+  process.env.REACT_APP_CAMERA_PARKING,
+  process.env.REACT_APP_CAMERA_HAL,
   process.env.REACT_APP_CAMERA_TEST,
   
 ];
