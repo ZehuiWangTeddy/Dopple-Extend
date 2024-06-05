@@ -10,7 +10,7 @@ const loadScript = (src, callback) => {
   document.head.appendChild(script);
 };
 
-const CameraPlayer = ({ url }) => {
+const CameraPlayer = ({ url, style }) => {
   const videoRef = useRef(null);
   const [loading, setLoading] = useState(true);
 
@@ -45,7 +45,7 @@ const CameraPlayer = ({ url }) => {
   }, [url]);
 
   return (
-    <div style={{ position: 'relative', width: '400px', height: '280px' }}>
+    <div style={{ position: 'relative', ...style }}>
       {loading && (
         <div style={{
           position: 'absolute',

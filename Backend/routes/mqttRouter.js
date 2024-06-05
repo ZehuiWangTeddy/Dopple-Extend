@@ -6,9 +6,9 @@ let clientCounter = 10000;
 const subscriptions = {};
 
 // MQTT Broker URL
-let mqtt_host = process.env.MQTT_HOST || 'localhost'
-let mqtt_port = process.env.MQTT_PORT || '1883'
-let mqtt_path = process.env.MQTT_PATH || ''
+let mqtt_host = process.env.MQTT_HOST || 'localhost';
+let mqtt_port = process.env.MQTT_PORT || '1883';
+let mqtt_path = process.env.MQTT_PATH || '';
 
 const mqttUrl = `mqtt://${mqtt_host}:${mqtt_port}${mqtt_path}`;
 
@@ -30,24 +30,23 @@ client.on('connect', function () {
     // Subscribe to MQTT topics
     client.subscribe('tailor/ORDER-PORTAL/#', function (err) {
         if (err) {
-            console.error('Error subscribing to topic1:', err);
+            console.error('Error subscribing to ORDER-PORTAL:', err);
         } else {
             console.log('Subscribed to ORDER-PORTAL');
         }
     });
     client.subscribe('tailor/PRADA/#', function (err) {
         if (err) {
-            console.error('Error subscribing to topic2:', err);
+            console.error('Error subscribing to PRADA:', err);
         } else {
             console.log('Subscribed to PRADA');
         }
     });
     client.subscribe('tailor/STATUS-REPORTER/#', function (err) {
         if (err) {
-            console.error('Error subscribing to topic2:', err);
+            console.error('Error subscribing to STATUS-REPORTER:', err);
         } else {
             console.log('Subscribed to STATUS-REPORTER');
-
         }
     });
     doorbells.forEach(doorbell => {
@@ -71,7 +70,6 @@ client.on('message', function (topic, message) {
     console.log(topic, data);
 
     // Send MQTT message to all subscribers
-    // Object.values(subscriptions).forEach(func => func(event));
     Object.values(subscriptions).forEach(func => {
         if (func) {
             func(event);
