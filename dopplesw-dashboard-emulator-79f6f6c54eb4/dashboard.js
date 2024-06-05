@@ -199,7 +199,7 @@ const doorFunctionInitToOff = async () => {
     const doorbells = [
         "deurbel_voordeur",
         "deurbel_achterdeur"
-    ]
+    ];
 
     const motionCamera = [
         "parkeerplaats_achter",
@@ -207,16 +207,14 @@ const doorFunctionInitToOff = async () => {
         "hal",
         "hal_lift",
         "deurbel_achterdeur"
-    ]
+    ];
 
-    // write all doorbells to off
     for (const bel of doorbells) {
-        await client.publishAsync(`dopple_access/ringers/${bel}/doorbell`, "OFF");
+        await client.publishAsync(`dopple_access/ringers/${bel}/doorbell`, JSON.stringify({ state: "OFF" }));
     }
 
-    // write all camera motion to off.
     for (const camera of motionCamera) {
-        await client.publishAsync(`dopple_access/cameras/${camera}/motion`, "OFF");
+        await client.publishAsync(`dopple_access/cameras/${camera}/motion`, JSON.stringify({ state: "OFF" }));
     }
 }
 
@@ -224,7 +222,7 @@ const loopDoorUpdateFunction = async () => {
     const doorbells = [
         "deurbel_voordeur",
         "deurbel_achterdeur"
-    ]
+    ];
 
     const motionCamera = [
         "parkeerplaats_achter",
@@ -232,26 +230,24 @@ const loopDoorUpdateFunction = async () => {
         "hal",
         "hal_lift",
         "deurbel_achterdeur"
-    ]
+    ];
 
-    // Randomize the chance of ringing the doorbell
     for (const bel of doorbells) {
         const random = Math.floor(Math.random() * 100);
         if (random % 5 === 0) {
-            await client.publishAsync(`dopple_access/ringers/${bel}/doorbell`, "ON");
+            await client.publishAsync(`dopple_access/ringers/${bel}/doorbell`, JSON.stringify({ state: "ON" }));
             setTimeout(async () => {
-                await client.publishAsync(`dopple_access/ringers/${bel}/doorbell`, "OFF");
+                await client.publishAsync(`dopple_access/ringers/${bel}/doorbell`, JSON.stringify({ state: "OFF" }));
             }, 15 * 1000);
         }
     }
 
-    // randomize the chance of seeing motion on the camera's
     for (const camera of motionCamera) {
         const random = Math.floor(Math.random() * 50);
         if (random % 5 === 0) {
-            await client.publishAsync(`dopple_access/cameras/${camera}/motion`, "ON");
+            await client.publishAsync(`dopple_access/cameras/${camera}/motion`, JSON.stringify({ state: "ON" }));
             setTimeout(async () => {
-                await client.publishAsync(`dopple_access/cameras/${camera}/motion`, "OFF");
+                await client.publishAsync(`dopple_access/cameras/${camera}/motion`, JSON.stringify({ state: "OFF" }));
             }, 3 * 1000);
         }
     }
