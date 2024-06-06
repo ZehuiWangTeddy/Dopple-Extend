@@ -6,11 +6,13 @@ const DashhboardContextProvider = ({ children }) => {
     const [printerLoading, setPrinterLoading] = useState(true);
     const [orderLoading, setOrderLoading] = useState(true);
     const [networkServiceLoading, setNetworkServiceLoading] = useState(true);
+    const [chiselServerLoading, setChiselServerLoading] = useState(true);
 
     const [printerData, setPrinterData] = useState([]);
     const [orderData, setOrderData] = useState({});
     const [networkServiceData, setNetworkServiceData] = useState([]);
     const [companyData, setCompanyData] = useState([]);
+    const [chiselServerData, setChiselServerData] = useState({});
 
     const completed = 'completed';
     const confirmed = 'confirmed';
@@ -36,7 +38,7 @@ const DashhboardContextProvider = ({ children }) => {
                     return 'unknown';
             }
         }
-    
+
         function parsePrinterData(data) {
             const printerStatus = Object.keys(data.values)
                 .filter((key) => key.startsWith("printer"))
@@ -47,7 +49,7 @@ const DashhboardContextProvider = ({ children }) => {
                 }));
             setPrinterData(printerStatus);
         }
-    
+
         function parseOrderData(orderDatas) {
             let companies = [];
             let cleanData = {};
@@ -57,21 +59,21 @@ const DashhboardContextProvider = ({ children }) => {
                 let status = key
                     .replace("total_orders_", "")
                     .replace(company + "_", "");
-    
+
                 if (!companies.includes(company)) {
                     companies.push(company);
                 }
-    
+
                 cleanData[company] = {
                     ...cleanData[company],
                     [status]: orderDatas.values[key]
                 }
             });
-    
+
             setCompanyData(companies);
             setOrderData(cleanData);
         }
-    
+
         function parseNetworkServiceData(orderDatas) {
             let services = Object.keys(orderDatas.values).map((key) => {
                 let name = key.replace('_status', '');
@@ -83,6 +85,65 @@ const DashhboardContextProvider = ({ children }) => {
                 )
             });
             setNetworkServiceData(services);
+        }
+
+        function parseChiselServerData(data) {
+            let datas = Object.keys(data.values).map((key) => {
+                let name = key.split('_').map((word) => {
+                    return word.charAt(0).toUpperCase() + word.slice(1);
+                }).join(' ');
+
+                return {
+                    label: name,
+                    value: data.values[key]
+                }
+            })
+
+            const normalItems = datas.filter(item => !Array.isArray(item.value));
+            const arrayItems = datas.filter(item => Array.isArray(item.value));
+
+            const tableView = ({ normalItems, arrayItems }) => {
+                let ds = normalItems.map((item, index) => {
+                    return (
+                        <tr key={index}>
+                            <td>{item.label}</td>
+                            <td>{item.value}</td>
+                        </tr>
+                    );
+                });
+
+                console.log(arrayItems);
+                let tags = arrayItems.map((item) => {
+                    let values = item.value.map((value) => {
+                        return (
+                            <span className='chiselItem'>{value}</span>
+                        );
+                    });
+                    return (
+                        <div>
+                            <h3>{item.label}</h3>
+                            <div className='chiselStatus'>
+                                {values}
+                            </div>
+                        </div>
+                    )
+                });
+
+                return (
+                    <div>
+                        <table>
+                            <tbody>
+                                {ds}
+                            </tbody>
+                        </table>
+                        {tags}
+                    </div>
+                );
+            };
+
+            setChiselServerData(
+                tableView({ normalItems:normalItems, arrayItems:arrayItems })
+            );
         }
 
         const es = new EventSource(SERVER_HOST);
@@ -106,19 +167,26 @@ const DashhboardContextProvider = ({ children }) => {
             let topicParts = topic.split("/");
             let type = topicParts[1];
 
-            const data = JSON.parse(message.toString());
-
             if (type === "PRADA") {
+                const data = JSON.parse(message.toString());
                 parsePrinterData(data);
                 setPrinterLoading(false);
             }
             if (type === "ORDER-PORTAL") {
+                const data = JSON.parse(message.toString());
                 parseOrderData(data);
                 setOrderLoading(false);
             }
             if (type === 'STATUS-REPORTER') {
+                const data = JSON.parse(message.toString());
                 parseNetworkServiceData(data);
                 setNetworkServiceLoading(false);
+            }
+
+            if (type === 'CHISEL-SERVER') {
+                const data = JSON.parse(message.toString());
+                parseChiselServerData(data);
+                setChiselServerLoading(false);
             }
         });
 
@@ -127,7 +195,7 @@ const DashhboardContextProvider = ({ children }) => {
     }, []);
 
     return (
-        <DashboardContext.Provider value={{ printerData, orderData, networkServiceData, companyData, statusData, orderLoading, networkServiceLoading, printerLoading }}>
+        <DashboardContext.Provider value={{ printerData, orderData, networkServiceData, companyData, statusData, chiselServerData, orderLoading, networkServiceLoading, printerLoading, chiselServerLoading }}>
             {children}
         </DashboardContext.Provider>
     );
