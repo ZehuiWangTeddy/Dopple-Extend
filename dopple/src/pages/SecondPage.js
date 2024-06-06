@@ -6,6 +6,7 @@ import PrinterStatus from '../components/PrinterStatus';
 import OrderStatus from '../components/OrderStatus';
 import DashhboardContextProvider from '../contexts/DashboardContextProvider';
 import NetworkStatus from '../components/NetworkStatus';
+import ChiselServer from '../components/ChiselServer';
 
 const SecondPage = () => {
   const navigate = useNavigate();
@@ -21,23 +22,14 @@ const SecondPage = () => {
       <div className="second-content">
         <OrderStatus />
         <PrinterStatus />
-        <div id="operatorStatus">
-          <table>
-            <tr>
-              <th>Operator Status</th>
-            </tr>
-            <tr>
-              <td>hi</td>
-            </tr>
-          </table>
-        </div>
+        <ChiselServer />
         <NetworkStatus />
+        <div className="button-container">
+          <button className="previous-page-button" onClick={handlePreviousPage}>
+              Previous Page
+          </button>
+        </div>
       </div>
-    </div>
-    <div className="button-container">
-      <button className="previous-page-button" onClick={handlePreviousPage}>
-          Previous Page
-      </button>
     </div>
     </DashhboardContextProvider>
   );

@@ -2,13 +2,15 @@ const express = require('express');
 const router = express.Router();
 const mqtt = require('mqtt');
 
+
 let clientCounter = 10000;
 const subscriptions = {};
 
 // MQTT Broker URL
-let mqtt_host = process.env.MQTT_HOST || 'localhost'
-let mqtt_port = process.env.MQTT_PORT || '1883'
+let mqtt_host = process.env.mqtt_host || ''
+let mqtt_port = process.env.mqtt_port || ''
 let mqtt_path = process.env.MQTT_PATH || ''
+
 
 const mqttUrl = `mqtt://${mqtt_host}:${mqtt_port}${mqtt_path}`;
 
@@ -28,28 +30,34 @@ const doorbells = [
 client.on('connect', function () {
     console.log('Connected to MQTT broker');
     // Subscribe to MQTT topics
-    client.subscribe('tailor/ORDER-PORTAL/#', function (err) {
+    client.subscribe('tailor/ORDER-PORTAL/dashboard', function (err) {
         if (err) {
             console.error('Error subscribing to topic1:', err);
         } else {
             console.log('Subscribed to ORDER-PORTAL');
         }
     });
-    client.subscribe('tailor/PRADA/#', function (err) {
+    client.subscribe('tailor/PRADA/dashboard', function (err) {
         if (err) {
             console.error('Error subscribing to topic2:', err);
         } else {
             console.log('Subscribed to PRADA');
         }
     });
-    client.subscribe('tailor/STATUS-REPORTER/#', function (err) {
+    client.subscribe('tailor/STATUS-REPORTER/dashboard', function (err) {
         if (err) {
             console.error('Error subscribing to topic2:', err);
         } else {
             console.log('Subscribed to STATUS-REPORTER');
-
         }
     });
+    client.subscribe('tailor/CHISEL-SERVER/dashboard', function(err) {
+        if (err) {
+            console.error('Error subscribing to topic2:', err);
+        } else {
+            console.log('Subscribed to CHISEL-SERVER');
+        }
+    })
     doorbells.forEach(doorbell => {
         const topic = `dopple_access/ringers/${doorbell}/doorbell`;
         client.subscribe(topic, function (err) {
