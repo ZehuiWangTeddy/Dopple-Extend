@@ -1,17 +1,16 @@
-
-
-
 const express = require('express');
 const router = express.Router();
 const mqtt = require('mqtt');
+
 
 let clientCounter = 10000;
 const subscriptions = {};
 
 // MQTT Broker URL
-let mqtt_host = process.env.mqtt_host || 'localhost';
-let mqtt_port = process.env.mqtt_port || '1883';
-let mqtt_path = process.env.MQTT_PATH || '';
+let mqtt_host = process.env.mqtt_host || 'localhost'
+let mqtt_port = process.env.mqtt_port || '1883'
+let mqtt_path = process.env.MQTT_PATH || ''
+
 
 const mqttUrl = `mqtt://${mqtt_host}:${mqtt_port}${mqtt_path}`;
 
@@ -30,37 +29,35 @@ const doorbells = [
 // Callback function for successful MQTT connection
 client.on('connect', function () {
     console.log('Connected to MQTT broker');
-    // Subscribe to additional topics
+    // Subscribe to MQTT topics
     client.subscribe('tailor/ORDER-PORTAL/dashboard', function (err) {
         if (err) {
-            console.error('Error subscribing to ORDER-PORTAL:', err);
+            console.error('Error subscribing to topic1:', err);
         } else {
             console.log('Subscribed to ORDER-PORTAL');
         }
     });
     client.subscribe('tailor/PRADA/dashboard', function (err) {
         if (err) {
-            console.error('Error subscribing to PRADA:', err);
+            console.error('Error subscribing to topic2:', err);
         } else {
             console.log('Subscribed to PRADA');
         }
     });
     client.subscribe('tailor/STATUS-REPORTER/dashboard', function (err) {
         if (err) {
-            console.error('Error subscribing to STATUS-REPORTER:', err);
+            console.error('Error subscribing to topic2:', err);
         } else {
             console.log('Subscribed to STATUS-REPORTER');
         }
     });
     client.subscribe('tailor/CHISEL-SERVER/dashboard', function(err) {
         if (err) {
-            console.error('Error subscribing to CHISEL-SERVER:', err);
+            console.error('Error subscribing to topic2:', err);
         } else {
             console.log('Subscribed to CHISEL-SERVER');
         }
-    });
-
-    // Subscribe to doorbell topics
+    })
     doorbells.forEach(doorbell => {
         const topic = `dopple_access/ringers/${doorbell}/doorbell`;
         client.subscribe(topic, function (err) {
@@ -75,23 +72,14 @@ client.on('connect', function () {
 
 // Handle MQTT messages
 client.on('message', function (topic, message) {
-    let data;
-    try {
-        data = JSON.parse(message.toString());
-    } catch (e) {
-        data = message.toString();
-    }
-    
-    if (data === null || data === undefined) {
-        console.error('Received null or undefined data:', topic, message.toString());
-        return;
-    }
+    // Handle MQTT message here as needed
+    const data = message.toString();
+    const event = { event: 'mqtt_message', topic: topic, data: data };
 
-    const event = { event: 'mqtt_message', topic: topic, data: JSON.stringify({ state: data }) };
-
-    console.log('MQTT message received:', topic, data);
+    console.log(topic, data);
 
     // Send MQTT message to all subscribers
+    // Object.values(subscriptions).forEach(func => func(event));
     Object.values(subscriptions).forEach(func => {
         if (func) {
             func(event);
@@ -129,7 +117,7 @@ router.get('/subscribe', async (req, res) => {
 
     req.on('close', () => {
         console.log("system", "Connection closed with id", currentClientID);
-        delete subscriptions[currentClientID];
+        subscriptions[currentClientID] = undefined;
         res.end('OK');
     });
 });
