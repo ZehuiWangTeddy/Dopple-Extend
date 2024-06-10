@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import CameraPlayer from './CameraPlayer';
 import './CameraFeeds.css';
 
@@ -15,8 +15,11 @@ const CameraFeeds = () => {
   const [focusedCamera, setFocusedCamera] = useState(null);
   const [focusTimeout, setFocusTimeout] = useState(null);
   const [doorbellMessage, setDoorbellMessage] = useState(''); // State for doorbell messages
+  const doorbellSoundRef = useRef(null); // Ref for doorbell sound
 
   useEffect(() => {
+    doorbellSoundRef.current = new Audio('https://upload.wikimedia.org/wikipedia/commons/3/34/Sound_Effect_-_Door_Bell.ogg');
+
     const subscription = new EventSource('http://localhost:3000/api/subscribe');
 
     const handleDoorbellEvent = (door, state) => {
@@ -25,6 +28,9 @@ const CameraFeeds = () => {
 
       if (state === 'ON') {
         setDoorbellMessage(`Doorbell ${door} ON`);
+        if (doorbellSoundRef.current) {
+          doorbellSoundRef.current.play().catch(error => console.error('Error playing sound:', error));
+        }
         if (focusTimeout) {
           clearTimeout(focusTimeout);
         }
