@@ -74,14 +74,14 @@ const DashhboardContextProvider = ({ children }) => {
             setOrderData(cleanData);
         }
 
-        function parseNetworkServiceData(orderDatas) {
-            let services = Object.keys(orderDatas.values).map((key) => {
+        function parseNetworkServiceData(networkServicesDatas) {
+            let services = Object.keys(networkServicesDatas.values).map((key) => {
                 let name = key.replace('_status', '');
                 name = name.split('_').map((word) => {
                     return word.charAt(0).toUpperCase() + word.slice(1);
                 }).join(' ');
                 return (
-                    <div key={key} className={`networkItem ${serviceStatusLabel(orderDatas.values[key])}`} > {name} {orderDatas.values[key]}</div>
+                    <div key={key} className={`networkItem ${serviceStatusLabel(networkServicesDatas.values[key])}`} > {name} {networkServicesDatas.values[key]}</div>
                 )
             });
             setNetworkServiceData(services);
