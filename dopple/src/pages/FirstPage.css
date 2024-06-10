@@ -1,33 +1,36 @@
 .dashboard-container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    padding: 15px;
+     /* Prevent content from overflowing */
 }
 
-.cameraViewText {
-    margin: 0 20px;
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
+
 
 .content {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 10px;
-    height: 100%;
+    flex: 1;
     background-color: #5d6f80;
+    
 }
 
-.cameraFeeds {
+#cameraFeeds {
     display: flex;
     align-items: center;
     justify-content: center;
-    
     border-radius: 10px;
     height: 100%;
     width: 100%;
 }
-
 
 .buttons {
     display: flex;
@@ -47,7 +50,7 @@
     border-radius: 5px;
     cursor: pointer;
 }
-  
+
 .open-door-button:hover, .next-page-button:hover {
     background-color: #33363F;
 }

@@ -1,46 +1,63 @@
 .camera-feeds-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-  }
-  
-  .camera-feeds-heading {
-    text-align: center;
-    margin: 10px 0;
-    padding: 0px;
-  }
-  
-  .camera-feeds-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    padding: 5px;
-  }
-  
-  .camera-player-container {
-    position: relative;
-    width: 350px;
-    height: 350px;
-  }
-  
-  .camera-player-loading {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 2;
-  }
-  
-  .camera-player-video {
-    width: 100%;
-    height: 100%;
-    display: none;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  padding: 30px;
+  margin-top: 50px;
+   /* Prevent overflow */
+}
+
+.camera-feeds-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  position: relative; /* Ensure that children are positioned relative to this container */
+  height: 100%;
+  width: 100%;
+}
+
+.camera-player {
+  position: relative;
+  width: 400px;
+  height: 280px;
+  transition: transform 0.3s, width 0.3s, height 0.3s, z-index 0.3s;
+}
+
+.camera-player.focused {
+  transform: scale(1.75); /* Scale up the focused camera */
+  z-index: 10; /* Bring the focused camera to the front */
+}
+
+.camera-player-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+
+.camera-player-video {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.doorbell-message {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #e0f7fa;
+  color: #00796b;
+  font-size: 16px;
+  text-align: center;
+  border-radius: 5px;
+}

@@ -8,34 +8,36 @@ const FirstPage = () => {
   const navigate = useNavigate();
 
   const handleOpenDoor = () => {
-      console.log("Door opened");
+    console.log("Door opened");
   };
 
   const handleNextPage = () => {
-      navigate("/stats");
+    navigate("/stats");
   };
-  
+
   return (
-    <div className="dashboard-container">
+    <div>
         <DoppleHeader />
-        <div className="cameraViewText">
-            <h3>Camera View</h3>
-        </div>
+    <div className="dashboard-container">
+      
+      <div className="main-content">
         <div className="content">
-        <div id="cameraFeeds"> 
-           <CameraFeeds />
-        </div>
+          <div id="cameraFeeds">
+            <CameraFeeds />
+          </div>
         </div>
         <div className="buttons">
-            {Array.from({ length: 2 }).map((_, index) => ( // Update to iterate only twice
-                <button className="open-door-button" key={index} onClick={handleOpenDoor}>
-                    Open Door
-                </button>
-            ))}
-            <button className="next-page-button" onClick={handleNextPage}>
-                Next Page
+          {Array.from({ length: 2 }).map((_, index) => (
+            <button className="open-door-button" key={index} onClick={handleOpenDoor}>
+              Open Door
             </button>
+          ))}
+          <button className="next-page-button" onClick={handleNextPage}>
+            Next Page
+          </button>
         </div>
+      </div>
+    </div>
     </div>
   );
 };
