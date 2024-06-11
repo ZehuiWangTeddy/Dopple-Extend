@@ -20,7 +20,10 @@ const NetworkStatus = () => {
 
     return (
         <div id="networkServices">
-          <h3>Network Services <img src={servicesLogo} alt="Server icon that represents the network services" /></h3>
+          <div id="networkTitle">
+            <h3>Network Services</h3>
+            <img src={servicesLogo} alt="Server icon that represents the network services" />
+          </div>
           { getBody() }
         </div>
     )

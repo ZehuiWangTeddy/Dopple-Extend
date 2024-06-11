@@ -7,8 +7,8 @@ let clientCounter = 10000;
 const subscriptions = {};
 
 // MQTT Broker URL
-let mqtt_host = process.env.mqtt_host || 'localhost';
-let mqtt_port = process.env.mqtt_port || '1883';
+let mqtt_host = process.env.mqtt_host || '';
+let mqtt_port = process.env.mqtt_port || '';
 let mqtt_path = process.env.MQTT_PATH || '';
 
 const mqttUrl = `mqtt://${mqtt_host}:${mqtt_port}${mqtt_path}`;
@@ -131,5 +131,14 @@ router.get('/subscribe', async (req, res) => {
         res.end('OK');
     });
 });
+
+router.post('/open/achterdeur/password', async (req, res) => {
+    // response json 
+    res.json({ status: "success", message: 'Door opened' });
+});
+router.post('/open/voordeur/password', (req, res) => {
+    // response json 
+    res.json({ status: "success", message: 'Door opened' });
+  });
 
 module.exports = router;
