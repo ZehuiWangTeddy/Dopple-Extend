@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import doppleLogo from "../../assets/doppleLogo.png";
 import doppleLog from "../../assets/doppleLog.PNG";
 import './CameraFeeds.css';
 
@@ -10,7 +9,7 @@ const loadScript = (src, callback) => {
   document.head.appendChild(script);
 };
 
-const CameraPlayer = ({ url }) => {
+const CameraPlayer = ({ url, isFocused }) => {
   const videoRef = useRef(null);
   const [loading, setLoading] = useState(true);
 
@@ -45,21 +44,16 @@ const CameraPlayer = ({ url }) => {
   }, [url]);
 
   return (
-    <div style={{ position: 'relative', width: '400px', height: '280px' }}>
+    <div 
+      className={`camera-player ${isFocused ? 'focused' : ''}`}
+      style={{ 
+        transition: 'transform 0.3s, z-index 0.3s',
+        zIndex: isFocused ? 10 : 1
+      }}
+    >
       {loading && (
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          zIndex: 2,
-        }}>
-          <img src={doppleLog} alt="Loading" style={{ width: '380px', height: '260px' }} />
+        <div className="camera-player-loading">
+          <img src={doppleLog} alt="Loading" style={{ width: '380px', height: '260px' }}/>
         </div>
       )}
       <video 
@@ -67,11 +61,8 @@ const CameraPlayer = ({ url }) => {
         controls 
         autoPlay 
         muted 
-        style={{ 
-          width: '100%', 
-          height: '100%', 
-          display: loading ? 'none' : 'block' 
-        }} 
+        className="camera-player-video"
+        style={{ display: loading ? 'none' : 'block' }}
       />
     </div>
   );

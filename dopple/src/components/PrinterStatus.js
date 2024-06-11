@@ -52,14 +52,11 @@ const PrinterStatus = () => {
 
     return (
         <div id="printers">
-          
-          <h3>
-            3D Printer Status{" "}
-            <img
-              src={printersLogo}
-              alt="Chip icon that represents the printers"
-            />
-          </h3>
+        
+          <div id="printerTitle">
+            <h3>3D Printer Status{" "}</h3>
+            <img src={printersLogo} alt="Chip icon that represents the printers"/>
+          </div>
           
           { getContent() }
         </div>

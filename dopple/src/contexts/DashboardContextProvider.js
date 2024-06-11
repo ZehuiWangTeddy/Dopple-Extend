@@ -40,12 +40,12 @@ const DashhboardContextProvider = ({ children }) => {
         }
 
         function parsePrinterData(data) {
-            const printerStatus = Object.keys(data.values)
+            const printerStatus = Object.keys(data.state.values)
                 .filter((key) => key.startsWith("printer"))
                 .map((key) => ({
                     id: key,
                     no: key.split("_")[1],
-                    status: data.values[key],
+                    status: data.state.values[key],
                 }));
             setPrinterData(printerStatus);
         }
@@ -53,7 +53,7 @@ const DashhboardContextProvider = ({ children }) => {
         function parseOrderData(orderDatas) {
             let companies = [];
             let cleanData = {};
-            Object.keys(orderDatas.values).forEach((key) => {
+            Object.keys(orderDatas.state.values).forEach((key) => {
                 let splitKey = key.split("_");
                 let company = splitKey[2];
                 let status = key
@@ -66,7 +66,7 @@ const DashhboardContextProvider = ({ children }) => {
 
                 cleanData[company] = {
                     ...cleanData[company],
-                    [status]: orderDatas.values[key]
+                    [status]: orderDatas.state.values[key]
                 }
             });
 
@@ -74,28 +74,29 @@ const DashhboardContextProvider = ({ children }) => {
             setOrderData(cleanData);
         }
 
-        function parseNetworkServiceData(orderDatas) {
-            let services = Object.keys(orderDatas.values).map((key) => {
+        function parseNetworkServiceData(networkServiceDatas) {
+            console.log(networkServiceDatas);
+            let services = Object.keys(networkServiceDatas.state.values).map((key) => {
                 let name = key.replace('_status', '');
                 name = name.split('_').map((word) => {
                     return word.charAt(0).toUpperCase() + word.slice(1);
                 }).join(' ');
                 return (
-                    <div key={key} className={`networkItem ${serviceStatusLabel(orderDatas.values[key])}`} > {name} {orderDatas.values[key]}</div>
+                    <div key={key} className={`networkItem ${serviceStatusLabel(networkServiceDatas.state.values[key])}`} > {name} {networkServiceDatas.state.values[key]}</div>
                 )
             });
             setNetworkServiceData(services);
         }
 
         function parseChiselServerData(data) {
-            let datas = Object.keys(data.values).map((key) => {
+            let datas = Object.keys(data.state.values).map((key) => {
                 let name = key.split('_').map((word) => {
                     return word.charAt(0).toUpperCase() + word.slice(1);
                 }).join(' ');
 
                 return {
                     label: name,
-                    value: data.values[key]
+                    value: data.state.values[key]
                 }
             })
 
@@ -112,7 +113,6 @@ const DashhboardContextProvider = ({ children }) => {
                     );
                 });
 
-                console.log(arrayItems);
                 let tags = arrayItems.map((item) => {
                     let values = item.value.map((value) => {
                         return (
