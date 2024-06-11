@@ -28,8 +28,11 @@
   margin-top: 3%;
 }
 
-#printers h3 {
+#printerTitle{
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #printers table {
@@ -89,6 +92,10 @@
   margin-top: 3%;
 }
 
+#orderStatus h3{
+  text-align: center;
+}
+
 #orderStatus table {
   display: flex;
   flex-direction: column;
@@ -112,11 +119,14 @@
 }
 
 #orderStatus table th {
-  display: block;
   width: 100%;
   font-size: larger;
-  font-weight: 900;
+  font-weight: 750;
   padding: 10px;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  align-items: center;
 }
 
 #orderStatus table tr td {
@@ -146,6 +156,13 @@
   border-radius: 10px;
   text-align: center;
   margin-top: 3%;
+}
+
+#networkTitle{
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #networkServices table tr {
@@ -211,6 +228,10 @@
   margin-top: 3%;
 }
 
+#operatorStatus h3{
+  text-align: center;
+}
+
 #operatorStatus table {
   display: flex;
   flex-direction: column;
@@ -248,7 +269,7 @@
   text-shadow: 2px 2px 2px rgb(71, 70, 70);
   display: block;
   width: 100%;
-  padding: 10px;
+  padding: 8px;
   text-align: center;
 }
 
@@ -257,8 +278,6 @@
 }
 
 .previous-page-button {
-  grid-row: 5/5;
-  grid-column: 5/7;
   width: 150px;
   height: 55px;
   font-size: 20px;

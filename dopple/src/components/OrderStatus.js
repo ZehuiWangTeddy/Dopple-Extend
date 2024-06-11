@@ -60,6 +60,7 @@ const OrderStatus = () => {
 
 return (
     <div id="orderStatus">
+        <h3>Order Status</h3>
         { getContent() }
     </div>
 )

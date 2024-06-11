@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import "./SecondPage.css";
 import DoppleHeader from "../components/DoppleHeader";
 import PrinterStatus from '../components/PrinterStatus';
@@ -7,13 +6,9 @@ import OrderStatus from '../components/OrderStatus';
 import DashhboardContextProvider from '../contexts/DashboardContextProvider';
 import NetworkStatus from '../components/NetworkStatus';
 import ChiselServer from '../components/ChiselServer';
+import PerviousPageButton from "../components/PerviousPageButton";
 
 const SecondPage = () => {
-  const navigate = useNavigate();
-
-  const handlePreviousPage = () => {
-    navigate("/");
-  };
 
   return (
     <DashhboardContextProvider>
@@ -25,9 +20,7 @@ const SecondPage = () => {
         <ChiselServer />
         <NetworkStatus />
         <div className="button-container">
-          <button className="previous-page-button" onClick={handlePreviousPage}>
-              Previous Page
-          </button>
+          <PerviousPageButton link="/"></PerviousPageButton>
         </div>
       </div>
     </div>
