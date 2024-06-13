@@ -1,20 +1,18 @@
+// src/App.js
 import React from 'react';
-import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import './App.css';
+import PageSwitcher from './components/PageSwitcher';
 
-import SecondPage from './pages/SecondPage';
-import FirstPage from './pages/FirstPage';
-
-function App() {
+const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<FirstPage />}/>
-        <Route path="/stats" element={<SecondPage />}/>
-        {/* <Route path="/" element={<SecondPage />}/> */}
+        <Route path="/" element={<PageSwitcher />} />
+        <Route path="/stats" element={<PageSwitcher />} />
       </Routes>
     </BrowserRouter>
   );
-}
+};
 
 export default App;
