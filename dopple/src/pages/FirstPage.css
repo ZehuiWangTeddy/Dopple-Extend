@@ -40,7 +40,7 @@
     padding-bottom: 30px;
 }
 
-.open-door-button, .next-page-button {
+.open-door-button, .next-page-button, .config-page-button {
     width: 150px;
     height: 55px;
     font-size: 20px;
@@ -51,6 +51,6 @@
     cursor: pointer;
 }
 
-.open-door-button:hover, .next-page-button:hover {
+.open-door-button:hover, .next-page-button:hover, .config-page-button:hover {
     background-color: #33363F;
 }
