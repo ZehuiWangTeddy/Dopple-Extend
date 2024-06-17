@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 
 import DashboardContext from '../contexts/DashboardContext';
-import servicesLogo from '../assets/server.png';
 import DoppleLoader from './DoppleLoader';
 
 const NetworkStatus = () => {
@@ -22,7 +21,6 @@ const NetworkStatus = () => {
         <div id="networkServices">
           <div id="networkTitle">
             <h3>Network Services</h3>
-            <img src={servicesLogo} alt="Server icon that represents the network services" />
           </div>
           { getBody() }
         </div>

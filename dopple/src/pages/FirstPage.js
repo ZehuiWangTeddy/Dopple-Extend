@@ -9,9 +9,8 @@ import ConfigPageButton from "../components/ConfigPageButton";
 
 const FirstPage = ({ handleNavigate }) => {
   return (
-    <div>
+    <div className="dashboard-container">
       <DoppleHeader />
-      <div className="dashboard-container">
         <div className="main-content">
           <div className="content">
             <div id="cameraFeeds">
@@ -25,7 +24,6 @@ const FirstPage = ({ handleNavigate }) => {
           <OpenDoor doorIndex={2} doorLabel="Open Back Door" />
           <NextPageButton handleNavigate={() => handleNavigate(2)} />
         </div>
-      </div>
     </div>
   );
 };

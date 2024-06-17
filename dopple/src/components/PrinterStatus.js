@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 
-import printersLogo from '../assets/3dPrinters.png';
 import DashboardContext from '../contexts/DashboardContext';
 import DoppleLoader from '../components/DoppleLoader';
 
@@ -55,7 +54,6 @@ const PrinterStatus = () => {
         
           <div id="printerTitle">
             <h3>3D Printer Status{" "}</h3>
-            <img src={printersLogo} alt="Chip icon that represents the printers"/>
           </div>
           
           { getContent() }

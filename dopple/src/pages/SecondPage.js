@@ -21,9 +21,9 @@ const SecondPage = ({ handleNavigate }) => {
           {features.PrinterStatus && <PrinterStatus />}
           {features.OperatorStatus && <ChiselServer />}
           {features.NetworkServices && <NetworkStatus />}
-          <div className="button-container">
-            <PreviousPageButton handleNavigate={() => handleNavigate(1)} />
-          </div>
+        </div>
+        <div className="button-container">
+          <PreviousPageButton handleNavigate={() => handleNavigate(1)} />
         </div>
       </div>
     </DashhboardContextProvider>

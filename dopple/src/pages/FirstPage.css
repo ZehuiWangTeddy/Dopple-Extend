@@ -2,17 +2,15 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding: 15px;
-     /* Prevent content from overflowing */
+    /* padding: 40px 15px; */
+    margin: 0 15px;
 }
-
 
 .main-content {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
-
 
 .content {
     display: flex;
