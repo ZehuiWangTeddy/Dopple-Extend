@@ -1,39 +1,77 @@
 // src/components/PageSwitcher.js
-import React, { useState, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import FirstPage from '../pages/FirstPage';
-import SecondPage from '../pages/SecondPage';
 
 const PageSwitcher = () => {
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1);
+  const doorbellSoundRef = useRef(null); // Ref for doorbell sound
+  const [focusTimeout, setFocusTimeout] = useState(null);
+  const eventSourceRef = useRef(null);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setCurrentPage((prevPage) => {
-        const nextPage = prevPage === 1 ? 2 : 1;
-        navigate(nextPage === 1 ? '/' : '/stats');
-        return nextPage;
-      });
+      navigate((prev) => (prev === '/' ? '/stats' : '/'));
     }, 15000); // 15000 milliseconds = 15 seconds
 
     return () => clearInterval(intervalId);
   }, [navigate]);
 
-  const handleNavigate = (page) => {
-    setCurrentPage(page);
-    navigate(page === 1 ? '/' : '/stats');
-  };
+  useEffect(() => {
+    eventSourceRef.current = new EventSource('http://localhost:3000/api/subscribe');
 
-  return (
-    <div>
-      {currentPage === 1 ? (
-        <FirstPage handleNavigate={handleNavigate} />
-      ) : (
-        <SecondPage handleNavigate={handleNavigate} />
-      )}
-    </div>
-  );
+    const handleDoorbellEvent = (door, state) => {
+      const eventMsg = `Doorbell ${door} event received with state: ${state}`;
+      console.log(eventMsg);
+
+      if (state === 'ON') {
+
+        navigate('/');
+
+        const timeout = setTimeout(() => {
+          setFocusTimeout(null);
+        }, 40000); // Keep the camera in focus for 40 seconds
+
+        setFocusTimeout(timeout);
+      } else if (state === 'OFF') {
+        if (focusTimeout) {
+          clearTimeout(focusTimeout);
+          setFocusTimeout(null);
+        }
+      }
+    };
+
+    eventSourceRef.current.onopen = () => {
+      console.log('>>> Connection opened!');
+    };
+
+    eventSourceRef.current.onerror = (e) => {
+      console.error('>>> EventSource failed:', e);
+    };
+
+    eventSourceRef.current.addEventListener('mqtt_message', (event) => {
+      console.log('>>> Event received:', event);
+
+      const eventData = JSON.parse(event.data);
+      const { topic, data } = eventData;
+      const message = JSON.parse(data);
+      const { state } = message;
+
+      if (topic === 'dopple_access/ringers/deurbel_voordeur/doorbell') {
+        handleDoorbellEvent('deurbel_voordeur', state);
+      } else if (topic === 'dopple_access/ringers/deurbel_achterdeur/doorbell') {
+        handleDoorbellEvent('deurbel_achterdeur', state);
+      }
+    });
+
+    return () => {
+      eventSourceRef.current.close();
+      if (focusTimeout) {
+        clearTimeout(focusTimeout);
+      }
+    };
+  }, [navigate, focusTimeout]);
+
+  return null;
 };
 
 export default PageSwitcher;

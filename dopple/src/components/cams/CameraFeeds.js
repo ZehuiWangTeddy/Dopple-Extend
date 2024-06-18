@@ -1,3 +1,4 @@
+// src/components/cams/CameraFeeds.js
 import React, { useState, useEffect, useRef } from 'react';
 import CameraPlayer from './CameraPlayer';
 import './CameraFeeds.css';
@@ -14,13 +15,29 @@ const CameraFeeds = () => {
   const activeCameras = cameraUrls.slice(0, 6);
   const [focusedCamera, setFocusedCamera] = useState(null);
   const [focusTimeout, setFocusTimeout] = useState(null);
-  const [doorbellMessage, setDoorbellMessage] = useState(''); // State for doorbell messages
-  const doorbellSoundRef = useRef(null); // Ref for doorbell sound
+  const [doorbellMessage, setDoorbellMessage] = useState('');
+  const doorbellSoundRef = useRef(null);
+  const eventSourceRef = useRef(null);
 
   useEffect(() => {
+    const triggeredCamera = localStorage.getItem('triggeredCamera');
+    const doorbellState = localStorage.getItem('doorbellState');
+
+    if (doorbellState === 'ON' && triggeredCamera) {
+      setFocusedCamera(triggeredCamera);
+
+      const timeout = setTimeout(() => {
+        setFocusedCamera(null);
+        localStorage.removeItem('triggeredCamera');
+        localStorage.removeItem('doorbellState');
+      }, 40000);
+
+      setFocusTimeout(timeout);
+    }
+
     doorbellSoundRef.current = new Audio('https://upload.wikimedia.org/wikipedia/commons/3/34/Sound_Effect_-_Door_Bell.ogg');
 
-    const subscription = new EventSource('http://localhost:3000/api/subscribe');
+    eventSourceRef.current = new EventSource('http://localhost:3000/api/subscribe');
 
     const handleDoorbellEvent = (door, state) => {
       const eventMsg = `Doorbell ${door} event received with state: ${state}`;
@@ -44,7 +61,7 @@ const CameraFeeds = () => {
         const timeout = setTimeout(() => {
           setFocusedCamera(null);
           setFocusTimeout(null);
-          setDoorbellMessage(''); // Clear the message after 40 seconds
+          setDoorbellMessage('');
         }, 40000); // Keep the camera in focus for 40 seconds
 
         setFocusTimeout(timeout);
@@ -54,19 +71,19 @@ const CameraFeeds = () => {
           setFocusedCamera(null);
           setFocusTimeout(null);
         }
-        setDoorbellMessage(''); // Clear the message when the state is OFF
+        setDoorbellMessage('');
       }
     };
 
-    subscription.onopen = () => {
+    eventSourceRef.current.onopen = () => {
       console.log('>>> Connection opened!');
     };
 
-    subscription.onerror = (e) => {
+    eventSourceRef.current.onerror = (e) => {
       console.error('>>> EventSource failed:', e);
     };
 
-    subscription.addEventListener('mqtt_message', (event) => {
+    eventSourceRef.current.addEventListener('mqtt_message', (event) => {
       console.log('>>> Event received:', event);
 
       const eventData = JSON.parse(event.data);
@@ -82,7 +99,7 @@ const CameraFeeds = () => {
     });
 
     return () => {
-      subscription.close();
+      eventSourceRef.current.close();
       if (focusTimeout) {
         clearTimeout(focusTimeout);
       }
