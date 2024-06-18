@@ -2,10 +2,8 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding: 15px;
-     /* Prevent content from overflowing */
+    margin: 0 15px;
 }
-
 
 .main-content {
     display: flex;
@@ -13,14 +11,12 @@
     justify-content: space-between;
 }
 
-
 .content {
     display: flex;
     justify-content: center;
     align-items: center;
     flex: 1;
     background-color: #5d6f80;
-    
 }
 
 #cameraFeeds {
@@ -40,7 +36,7 @@
     padding-bottom: 30px;
 }
 
-.open-door-button, .next-page-button {
+.open-door-button, .next-page-button, .config-page-button {
     width: 150px;
     height: 55px;
     font-size: 20px;
@@ -51,6 +47,6 @@
     cursor: pointer;
 }
 
-.open-door-button:hover, .next-page-button:hover {
+.open-door-button:hover, .next-page-button:hover, .config-page-button:hover {
     background-color: #33363F;
 }

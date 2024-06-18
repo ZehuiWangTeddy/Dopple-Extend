@@ -15,7 +15,7 @@ const PageSwitcher = () => {
         navigate(nextPage === 1 ? '/' : '/stats');
         return nextPage;
       });
-    }, 15000); // 15000 milliseconds = 15 seconds
+    }, 15000000); // 15000 milliseconds = 15 seconds
 
     return () => clearInterval(intervalId);
   }, [navigate]);
