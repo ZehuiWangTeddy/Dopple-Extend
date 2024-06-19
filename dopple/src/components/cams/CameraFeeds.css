@@ -7,6 +7,7 @@
   width: 100%;
   padding: 30px;
   margin-top: 50px;
+  position: relative; /* Ensure the container is relatively positioned */
 }
 
 .camera-feeds-wrapper {
@@ -14,7 +15,7 @@
   flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
-  position: relative; 
+  position: relative;
   height: 100%;
   width: 100%;
 }
@@ -27,14 +28,16 @@
 }
 
 .camera-player.focused {
-  position: fixed; /* Fixed position to center it on the screen */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(1.75); /* Center and scale up */
-  z-index: 10; /* Bring the focused camera to the front */
+  position: absolute;
+  top: 50%; /* Center vertically within the container */
+  left: 50%; /* Center horizontally within the container */
+  transform: translate(-50%, -50%) scale(1.5); /* Center and scale up */
+  z-index: 10;
+  width: 400px; /* Increase width */
+  height: 300px; /* Increase height */
   border: 10px solid; /* Add a border */
-  border-image: linear-gradient(45deg, red, yellow, green, cyan, blue, magenta, red) 1; /* Multi-color border */
-  animation: border-animation 2s infinite; /* Apply the animation */
+  border-image: linear-gradient(45deg, red, cyan, magenta, red) 1;
+  animation: border-animation 2s infinite;
 }
 
 @keyframes border-animation {

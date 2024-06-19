@@ -44,23 +44,23 @@ const CameraPlayer = ({ url, isFocused }) => {
   }, [url]);
 
   return (
-    <div 
+    <div
       className={`camera-player ${isFocused ? 'focused' : ''}`}
-      style={{ 
+      style={{
         transition: 'transform 0.3s, z-index 0.3s',
-        zIndex: isFocused ? 10 : 1
+        zIndex: isFocused ? 10 : 1,
       }}
     >
       {loading && (
         <div className="camera-player-loading">
-          <img src={doppleLog} alt="Loading" style={{ width: '380px', height: '260px' }}/>
+          <img src={doppleLog} alt="Loading" style={{ width: '380px', height: '260px' }} />
         </div>
       )}
-      <video 
-        ref={videoRef} 
-        controls 
-        autoPlay 
-        muted 
+      <video
+        ref={videoRef}
+        controls
+        autoPlay
+        muted
         className="camera-player-video"
         style={{ display: loading ? 'none' : 'block' }}
       />

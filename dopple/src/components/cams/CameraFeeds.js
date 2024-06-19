@@ -1,3 +1,4 @@
+// src/components/cams/CameraFeeds.js
 import React, { useState, useEffect, useRef } from 'react';
 import CameraPlayer from './CameraPlayer';
 import './CameraFeeds.css';
@@ -10,7 +11,7 @@ const cameraUrls = [
   process.env.REACT_APP_CAMERA_HAL,
 ];
 
-const CameraFeeds = () => {
+const CameraFeeds = ({ handleNavigate, handleDoorbellEvent }) => {
   const activeCameras = cameraUrls.slice(0, 6);
   const [focusedCamera, setFocusedCamera] = useState(null);
   const [focusTimeout, setFocusTimeout] = useState(null);
@@ -22,12 +23,13 @@ const CameraFeeds = () => {
 
     const subscription = new EventSource('http://localhost:3000/api/subscribe');
 
-    const handleDoorbellEvent = (door, state) => {
+    const handleDoorbellEventInternal = (door, state) => {
       const eventMsg = `Doorbell ${door} event received with state: ${state}`;
       console.log(eventMsg);
 
       if (state === 'ON') {
         setDoorbellMessage(`Doorbell ${door} ON`);
+        console.log('Playing doorbell sound...');
         if (doorbellSoundRef.current) {
           doorbellSoundRef.current.play().catch(error => console.error('Error playing sound:', error));
         }
@@ -40,6 +42,13 @@ const CameraFeeds = () => {
             ? process.env.REACT_APP_CAMERA_FRONT
             : process.env.REACT_APP_CAMERA_BACK;
         setFocusedCamera(cameraUrl);
+
+        console.log('Calling handleDoorbellEvent to switch page...');
+        if (typeof handleDoorbellEvent === 'function') {
+          handleDoorbellEvent(); // Call the callback to switch to the first page
+        } else {
+          console.error('handleDoorbellEvent is not a function');
+        }
 
         const timeout = setTimeout(() => {
           setFocusedCamera(null);
@@ -75,9 +84,9 @@ const CameraFeeds = () => {
       const { state } = message;
 
       if (topic === 'dopple_access/ringers/deurbel_voordeur/doorbell') {
-        handleDoorbellEvent('deurbel_voordeur', state);
+        handleDoorbellEventInternal('deurbel_voordeur', state);
       } else if (topic === 'dopple_access/ringers/deurbel_achterdeur/doorbell') {
-        handleDoorbellEvent('deurbel_achterdeur', state);
+        handleDoorbellEventInternal('deurbel_achterdeur', state);
       }
     });
 
@@ -87,7 +96,7 @@ const CameraFeeds = () => {
         clearTimeout(focusTimeout);
       }
     };
-  }, [focusTimeout]);
+  }, [focusTimeout, handleDoorbellEvent]);
 
   return (
     <div className="camera-feeds-container">

@@ -6,7 +6,7 @@ import CameraFeeds from "../components/cams/CameraFeeds";
 import OpenDoor from "../components/OpenDoor";
 import NextPageButton from "../components/NextPageButton";
 
-const FirstPage = ({ handleNavigate }) => {
+const FirstPage = ({ handleNavigate, handleDoorbellEvent }) => {
   return (
     <div>
       <DoppleHeader />
@@ -14,7 +14,7 @@ const FirstPage = ({ handleNavigate }) => {
         <div className="main-content">
           <div className="content">
             <div id="cameraFeeds">
-              <CameraFeeds />
+              <CameraFeeds handleNavigate={handleNavigate} handleDoorbellEvent={handleDoorbellEvent} />
             </div>
           </div>
         </div>

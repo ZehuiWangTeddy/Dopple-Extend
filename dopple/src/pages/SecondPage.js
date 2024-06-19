@@ -9,7 +9,7 @@ import NetworkStatus from '../components/NetworkStatus';
 import ChiselServer from '../components/ChiselServer';
 import PreviousPageButton from "../components/PreviousPageButton";
 
-const SecondPage = ({ handleNavigate }) => {
+const SecondPage = ({ handleNavigate, handleDoorbellEvent }) => {
   return (
     <DashhboardContextProvider>
       <div className="dashboard-container">
