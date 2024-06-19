@@ -1,0 +1,78 @@
+.configuration-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+}
+
+.config-content {
+    flex: 1 1 auto;
+    background-color: #5d6f80;
+    border-radius: 30px;
+    padding: 30px 100px 60px 100px;
+    margin: 70px 150px 20px 150px;
+}
+
+.config-heading {
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    color: white;
+    border: 1px solid #333;
+    cursor: default;
+}
+
+th {
+    background-color: #4a5c6b;
+    cursor: default;
+}
+
+.toggle-button {
+    width: 100px;
+    height: 40px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.toggle-button.on {
+    background-color: green;
+    color: white;
+}
+
+.toggle-button.off {
+    background-color: red;
+    color: white;
+}
+
+.config-button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin: 20px;
+}
+
+.config-button {
+    width: 150px;
+    height: 50px;
+    font-size: 16px;
+    background-color: #5d6f80;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.config-button:hover {
+    background-color: #33363F;
+}
