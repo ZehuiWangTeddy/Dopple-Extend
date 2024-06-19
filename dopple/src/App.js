@@ -2,14 +2,13 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
-import PageSwitcher from './components/PageSwitcher';
+import MainContainer from './components/MainContainer';
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<PageSwitcher />} />
-        <Route path="/stats" element={<PageSwitcher />} />
+        <Route path="/*" element={<MainContainer />} />
       </Routes>
     </BrowserRouter>
   );
