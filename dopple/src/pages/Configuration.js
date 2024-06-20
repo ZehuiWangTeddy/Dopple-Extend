@@ -31,7 +31,7 @@ const Configuration = () => {
                                         className={`toggle-button ${features[feature] ? 'on' : 'off'}`}
                                         onClick={() => toggleFeature(feature)}
                                     >
-                                        {features[feature] ? 'Turn off' : 'Turn on'}
+                                        {features[feature] ? 'ON' : 'OFF'}
                                     </button>
                                 </td>
                             </tr>
