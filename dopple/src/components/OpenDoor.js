@@ -1,6 +1,10 @@
-import React from 'react';
+// src/components/OpenDoor.js
+import React, { useState } from 'react';
+import Toast from './Toast';
 
-const OpenDoor = ({ doorIndex, doorLabel }) => {
+const OpenDoor = ({ doorIndex, doorLabel, onClick }) => {
+  const [toastMessage, setToastMessage] = useState('');
+
   const handleOpenDoor = (id) => {
     // Define different hosts for different buttons
     const front_host = process.env.REACT_APP_OPEN_FRONT_DOOR_HOST;
@@ -24,23 +28,40 @@ const OpenDoor = ({ doorIndex, doorLabel }) => {
       .then((response) => response.json())
       .then((data) => {
         if (data.error === "PIN_INCORRECT") {
-          alert("Door opened");
+          setToastMessage("Door opened");
         } else {
-          alert("Door open failed");
+          setToastMessage("Door open failed");
+        }
+        // Call the onClick function to stop the focus
+        if (onClick) {
+          onClick();
         }
       })
       .catch((error) => {
         console.error("Failed to open door", error);
+        setToastMessage("Failed to open door");
+        // Call the onClick function to stop the focus even if the request fails
+        if (onClick) {
+          onClick();
+        }
       });
   };
 
   return (
-    <button
-      className="open-door-button"
-      onClick={() => handleOpenDoor(doorIndex)}
-    >
-      {doorLabel}
-    </button>
+    <>
+      <button
+        className="open-door-button"
+        onClick={() => handleOpenDoor(doorIndex)}
+      >
+        {doorLabel}
+      </button>
+      {toastMessage && (
+        <Toast
+          message={toastMessage}
+          onClose={() => setToastMessage('')}
+        />
+      )}
+    </>
   );
 };
 

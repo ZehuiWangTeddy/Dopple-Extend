@@ -1,57 +1,76 @@
+/* src/pages/FirstPage.css */
 .dashboard-container {
     display: flex;
     flex-direction: column;
     height: 100%;
     padding: 15px;
-     /* Prevent content from overflowing */
-}
-
-
-.main-content {
+    background-color: #f4f7f6; /* Light background color */
+    color: #2c3e50; /* Dark text color */
+  }
+  
+  .main-content {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-}
-
-
-.content {
+  }
+  
+  .content {
     display: flex;
     justify-content: center;
     align-items: center;
     flex: 1;
-    background-color: #5d6f80;
-    
-}
-
-#cameraFeeds {
+    background-color: transparent; /* Transparent background */
+    padding: 20px; /* Padding around content */
+  }
+  
+  #cameraFeeds {
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 10px;
     height: 100%;
     width: 100%;
-}
-
-.buttons {
+  }
+  
+  .buttons {
     display: flex;
     justify-content: center;
-    gap: 100px;
+    gap: 20px; /* Reduced gap for better spacing */
     margin-top: 30px;
     padding-bottom: 30px;
-    grid-row: 5/6;
-}
-
-.open-door-button, .next-page-button {
-    width: 150px;
+  }
+  
+  .open-door-button, .next-page-button {
+    width: 180px; /* Slightly increased width */
     height: 55px;
-    font-size: 20px;
+    font-size: 18px;
+    font-weight: bold;
     color: #fff;
-    background-color: #5d6f80;
+    background-color: #5d6f80; /* Original color */
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
-
-.open-door-button:hover, .next-page-button:hover {
-    background-color: #33363F;
-}
+    transition: background-color 0.3s ease;
+  }
+  
+  .open-door-button:hover, .next-page-button:hover {
+    background-color: #3c4b57; /* Darker shade of the original color on hover */
+  }
+  
+  .config-page-button {
+    width: 180px;
+    height: 55px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #5d6f80; /* Original color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .config-page-button:hover {
+    background-color: #3c4b57; /* Darker shade of the original color on hover */
+  }
+  

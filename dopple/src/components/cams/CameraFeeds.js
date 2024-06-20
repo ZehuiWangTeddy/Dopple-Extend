@@ -1,6 +1,8 @@
 // src/components/cams/CameraFeeds.js
 import React, { useState, useEffect, useRef } from 'react';
 import CameraPlayer from './CameraPlayer';
+import OpenDoor from '../OpenDoor';
+import Toast from '../Toast'; // Import the Toast component
 import './CameraFeeds.css';
 
 const cameraUrls = [
@@ -16,6 +18,7 @@ const CameraFeeds = () => {
   const [focusedCamera, setFocusedCamera] = useState(null);
   const [focusTimeout, setFocusTimeout] = useState(null);
   const [doorbellMessage, setDoorbellMessage] = useState('');
+  const [toastMessage, setToastMessage] = useState(''); // State for toast messages
   const doorbellSoundRef = useRef(null);
   const eventSourceRef = useRef(null);
 
@@ -44,7 +47,6 @@ const CameraFeeds = () => {
       console.log(eventMsg);
 
       if (state === 'ON') {
-        setDoorbellMessage(`Doorbell ${door} ON`);
         if (doorbellSoundRef.current) {
           doorbellSoundRef.current.play().catch(error => console.error('Error playing sound:', error));
         }
@@ -106,21 +108,45 @@ const CameraFeeds = () => {
     };
   }, [focusTimeout]);
 
+  const handleOpenDoorClick = () => {
+    if (focusTimeout) {
+      clearTimeout(focusTimeout);
+    }
+    setFocusedCamera(null);
+    setFocusTimeout(null);
+  };
+
   return (
     <div className="camera-feeds-container">
       <div className="camera-feeds-wrapper">
         {activeCameras.map((url, index) => (
-          <CameraPlayer
-            key={index}
-            url={url}
-            isFocused={url === focusedCamera}
-          />
+          <div key={index} className="camera-player-container">
+            <CameraPlayer
+              url={url}
+              isFocused={url === focusedCamera}
+            />
+            {url === focusedCamera && (
+              <div className="open-door-button-container">
+                {url === process.env.REACT_APP_CAMERA_FRONT ? (
+                  <OpenDoor doorIndex={1} doorLabel="Open Front Door" onClick={handleOpenDoorClick} />
+                ) : url === process.env.REACT_APP_CAMERA_BACK ? (
+                  <OpenDoor doorIndex={2} doorLabel="Open Back Door" onClick={handleOpenDoorClick} />
+                ) : null}
+              </div>
+            )}
+          </div>
         ))}
       </div>
       {doorbellMessage && (
         <div className="doorbell-message">
           {doorbellMessage}
         </div>
+      )}
+      {toastMessage && (
+        <Toast
+          message={toastMessage}
+          onClose={() => setToastMessage('')}
+        />
       )}
     </div>
   );

@@ -24,10 +24,10 @@ const PrinterStatus = () => {
                   style={{
                     backgroundColor:
                       printer.status === "FREE"
-                        ? "#3f2"
+                        ? "#27ae60"
                         : printer.status === "PRINTING"
                           ? "#ACA45E"
-                          : "red",
+                          : "#c0392b",
                   }}
                 >
                   {printer.status}
