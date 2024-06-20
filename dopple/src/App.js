@@ -1,25 +1,18 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Header from './components/Header';
-import Sidebar from './components/Sidebar';
-import HomePage from './components/HomePage';
-import ListingsPage from './components/ListingsPage';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
+import MainContainer from './components/MainContainer';
+import { FeatureProvider } from './contexts/FeatureContext';
 
 const App = () => {
   return (
-    <Router>
-      <div className="app">
-        <Header />
-        <Sidebar />
-        <div className="main-content">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/listings" element={<ListingsPage />} />
-          </Routes>
-        </div>
-      </div>
-    </Router>
+    <FeatureProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/*" element={<MainContainer />} />
+        </Routes>
+      </BrowserRouter>
+    </FeatureProvider>
   );
 };
 
