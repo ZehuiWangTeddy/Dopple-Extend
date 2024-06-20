@@ -21,7 +21,7 @@
 
 .camera-player {
   position: relative;
-  width: 400px;
+  width: 380px;
   height: 280px;
   transition: transform 0.3s, width 0.3s, height 0.3s, z-index 0.3s;
 }
@@ -33,8 +33,8 @@
   transform: translate(-50%, -50%) scale(1.75); /* Center and scale up */
   z-index: 10; /* Bring the focused camera to the front */
   border: 10px solid; /* Add a border */
-  border-image: linear-gradient(45deg, red, yellow, green, cyan, blue, magenta, red) 1; /* Multi-color border */
-  animation: border-animation 2s infinite; /* Apply the animation */
+  border-image: linear-gradient(45deg, red, magenta, red) 1; /* Multi-color border */
+  animation: border-animation 8s infinite; /* Apply the animation */
 }
 
 @keyframes border-animation {

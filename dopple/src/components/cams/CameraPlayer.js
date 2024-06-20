@@ -53,7 +53,7 @@ const CameraPlayer = ({ url, isFocused }) => {
     >
       {loading && (
         <div className="camera-player-loading">
-          <img src={doppleLog} alt="Loading" style={{ width: '380px', height: '260px' }}/>
+          <img src={doppleLog} alt="Loading" style={{ width: '380px', height: '280px' }}/>
         </div>
       )}
       <video 
