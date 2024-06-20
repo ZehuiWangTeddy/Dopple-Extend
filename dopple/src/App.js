@@ -1,16 +1,25 @@
-// src/App.js
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Header from './components/Header';
+import Sidebar from './components/Sidebar';
+import HomePage from './components/HomePage';
+import ListingsPage from './components/ListingsPage';
 import './App.css';
-import MainContainer from './components/MainContainer';
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/*" element={<MainContainer />} />
-      </Routes>
-    </BrowserRouter>
+    <Router>
+      <div className="app">
+        <Header />
+        <Sidebar />
+        <div className="main-content">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/listings" element={<ListingsPage />} />
+          </Routes>
+        </div>
+      </div>
+    </Router>
   );
 };
 
