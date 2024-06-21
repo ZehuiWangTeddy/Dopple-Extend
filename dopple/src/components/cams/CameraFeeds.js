@@ -1,7 +1,7 @@
-// src/components/cams/CameraFeeds.js
 import React, { useState, useEffect, useRef } from 'react';
 import CameraPlayer from './CameraPlayer';
 import './CameraFeeds.css';
+import OpenDoor from '../OpenDoor';
 
 const cameraUrls = [
   process.env.REACT_APP_CAMERA_FRONT,
@@ -44,7 +44,6 @@ const CameraFeeds = () => {
       console.log(eventMsg);
 
       if (state === 'ON') {
-        setDoorbellMessage(`Doorbell ${door} ON`);
         if (doorbellSoundRef.current) {
           doorbellSoundRef.current.play().catch(error => console.error('Error playing sound:', error));
         }
@@ -106,15 +105,34 @@ const CameraFeeds = () => {
     };
   }, [focusTimeout]);
 
+  const stopFocus = () => {
+    setFocusedCamera(null);
+    if (focusTimeout) {
+      clearTimeout(focusTimeout);
+      setFocusTimeout(null);
+    }
+  };
+
   return (
     <div className="camera-feeds-container">
       <div className="camera-feeds-wrapper">
         {activeCameras.map((url, index) => (
-          <CameraPlayer
-            key={index}
-            url={url}
-            isFocused={url === focusedCamera}
-          />
+          <div key={index} className="camera-player-container">
+            <CameraPlayer
+              url={url}
+              isFocused={url === focusedCamera}
+            />
+            {url === focusedCamera && (
+              <div className="open-door-button-container">
+                {url === process.env.REACT_APP_CAMERA_FRONT && (
+                  <OpenDoor doorIndex={1} doorLabel="Open Front Door" stopFocus={stopFocus} />
+                )}
+                {url === process.env.REACT_APP_CAMERA_BACK && (
+                  <OpenDoor doorIndex={2} doorLabel="Open Back Door" stopFocus={stopFocus} />
+                )}
+              </div>
+            )}
+          </div>
         ))}
       </div>
       {doorbellMessage && (

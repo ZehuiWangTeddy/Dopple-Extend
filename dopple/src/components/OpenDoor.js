@@ -1,6 +1,6 @@
 import React from 'react';
 
-const OpenDoor = ({ doorIndex, doorLabel }) => {
+const OpenDoor = ({ doorIndex, doorLabel, stopFocus }) => {
   const handleOpenDoor = (id) => {
     // Define different hosts for different buttons
     const front_host = process.env.REACT_APP_OPEN_FRONT_DOOR_HOST;
@@ -28,9 +28,11 @@ const OpenDoor = ({ doorIndex, doorLabel }) => {
         } else {
           alert("Door open failed");
         }
+        stopFocus(); // Stop focus after opening the door
       })
       .catch((error) => {
         console.error("Failed to open door", error);
+        stopFocus(); // Ensure focus stops even if there's an error
       });
   };
 
