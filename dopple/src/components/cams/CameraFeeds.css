@@ -29,7 +29,7 @@
 
 .camera-player {
   position: relative;
-  width: 380px;
+  width: 399px;
   height: 280px;
   transition: transform 0.3s, width 0.3s, height 0.3s, z-index 0.3s;
   border-radius: 15px; /* Rounded corners */
