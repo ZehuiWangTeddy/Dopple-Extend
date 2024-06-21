@@ -1,16 +1,19 @@
 import React from 'react';
-import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import './App.css';
+import MainContainer from './components/MainContainer';
+import { FeatureProvider } from './contexts/FeatureContext';
 
-function App() {
+const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Dashboard />}/>
-      </Routes>
-    </BrowserRouter>
+    <FeatureProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/*" element={<MainContainer />} />
+        </Routes>
+      </BrowserRouter>
+    </FeatureProvider>
   );
-}
+};
 
 export default App;

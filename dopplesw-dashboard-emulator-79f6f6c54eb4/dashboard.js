@@ -15,12 +15,14 @@ let mqtt_connected = false;
  * Gets the javascript timeout object so we can cancel the next looper call.
  */
 let looper_timeout = null;
+let door_looper_timeout = null;
 
 /**
  * Frequency at which dashboard updates should be published.
  * Unit is in seconds
  */
-const DASHBOARD_FREQUENCY = 300;
+const DASHBOARD_FREQUENCY = 30;
+const CAMERA_FREQUENCY = 20; // recommended 20 seconds, since doorbell notification stays active for 15 seconds when pressed in real life
 
 /**
  * Change this to connect to a different server
@@ -46,18 +48,47 @@ const SERVICES = [
         key: "ORDER-PORTAL",
         name: "Order API",
         keys: [
+            { name: "total_orders_reduson-bv_created", type: "number" },
+            { name: "total_orders_reduson-bv_locked", type: "number" },
+            { name: "total_orders_reduson-bv_confirmed", type: "number" },
+            { name: "total_orders_reduson-bv_in_production", type: "number" },
+            { name: "total_orders_reduson-bv_shipped", type: "number" },
+            { name: "total_orders_reduson-bv_completed", type: "number" },
+
             { name: "total_orders_earsonly_created", type: "number" },
             { name: "total_orders_earsonly_locked", type: "number" },
             { name: "total_orders_earsonly_confirmed", type: "number" },
             { name: "total_orders_earsonly_in_production", type: "number" },
             { name: "total_orders_earsonly_shipped", type: "number" },
             { name: "total_orders_earsonly_completed", type: "number" },
-            { name: "total_orders_reduson_created", type: "number" },
-            { name: "total_orders_reduson_locked", type: "number" },
-            { name: "total_orders_reduson_confirmed", type: "number" },
-            { name: "total_orders_reduson_in_production", type: "number" },
-            { name: "total_orders_reduson_shipped", type: "number" },
-            { name: "total_orders_reduson_completed", type: "number" },
+
+            { name: "total_orders_demo-sales-tenant_created", type: "number" },
+            { name: "total_orders_demo-sales-tenant_locked", type: "number" },
+            { name: "total_orders_demo-sales-tenant_confirmed", type: "number" },
+            { name: "total_orders_demo-sales-tenant_in_production", type: "number" },
+            { name: "total_orders_demo-sales-tenant_shipped", type: "number" },
+            { name: "total_orders_demo-sales-tenant_completed", type: "number" },
+
+            { name: "total_orders_comfoor-bv_created", type: "number" },
+            { name: "total_orders_comfoor-bv_locked", type: "number" },
+            { name: "total_orders_comfoor-bv_confirmed", type: "number" },
+            { name: "total_orders_comfoor-bv_in_production", type: "number" },
+            { name: "total_orders_comfoor-bv_shipped", type: "number" },
+            { name: "total_orders_comfoor-bv_completed", type: "number" },
+
+            { name: "total_orders_elacin-international-bv_created", type: "number" },
+            { name: "total_orders_elacin-international-bv_locked", type: "number" },
+            { name: "total_orders_elacin-international-bv_confirmed", type: "number" },
+            { name: "total_orders_elacin-international-bv_in_production", type: "number" },
+            { name: "total_orders_elacin-international-bv_shipped", type: "number" },
+            { name: "total_orders_elacin-international-bv_completed", type: "number" },
+
+            { name: "total_orders_cotral-lab-france_created", type: "number" },
+            { name: "total_orders_cotral-lab-france_locked", type: "number" },
+            { name: "total_orders_cotral-lab-france_confirmed", type: "number" },
+            { name: "total_orders_cotral-lab-france_in_production", type: "number" },
+            { name: "total_orders_cotral-lab-france_shipped", type: "number" },
+            { name: "total_orders_cotral-lab-france_completed", type: "number" },
         ]
     },
     {
@@ -73,11 +104,18 @@ const SERVICES = [
         key: "STATUS-REPORTER",
         name: "Status Reporter",
         keys: [
-            { name: "service_1_status", type: "string" },
-            { name: "service_2_status", type: "string" },
-            { name: "service_3_status", type: "string" },
-            { name: "service_4_status", type: "string" },
-            { name: "service_5_status", type: "string" },
+            { name: "service_order-portal_status", type: "string" },
+            { name: "service_chisel-server_status", type: "string" },
+            { name: "service_exact-broker_status", type: "string" },
+            { name: "service_tassel_status", type: "string" },
+            { name: "service_reify-server_status", type: "string" },
+            { name: "service_prada_status", type: "string" },
+            { name: "service_xray_status", type: "string" },
+            { name: "service_chanel_status", type: "string" },
+            { name: "service_reify_status", type: "string" },
+            { name: "service_ribbon_status", type: "string" },
+            { name: "service_aglet_status", type: "string" },
+            { name: "service_new-earsonly_status", type: "string" },
         ]
     },
     {
@@ -129,7 +167,7 @@ const loopFunction = async () => {
                     packet.values[key.name] = Math.round(Math.random() * 1000)
                     break;
                 case "string":
-                    if(key.name.includes("print")) {
+                    if (key.name.includes("print")) {
                         packet.values[key.name] = PRINTER_STATUS_STRINGS[Math.floor(Math.random() * PRINTER_STATUS_STRINGS.length)];
                     }
                     else if (key.name.includes("service")) {
@@ -138,7 +176,7 @@ const loopFunction = async () => {
                     else {
                         packet.values[key.name] = names[Math.floor(Math.random() * names.length)];
                     }
-                    
+
                     break;
                 case "list":
                     packet.values[key.name] = [];
@@ -154,6 +192,68 @@ const loopFunction = async () => {
         await client.publishAsync('tailor/' + service.key + "/dashboard", JSON.stringify(packet), {
             retain: true
         });
+    }
+}
+
+const doorFunctionInitToOff = async () => {
+    const doorbells = [
+        "deurbel_voordeur",
+        "deurbel_achterdeur"
+    ]
+
+    const motionCamera = [
+        "parkeerplaats_achter",
+        "deurbel_voordeur",
+        "hal",
+        "hal_lift",
+        "deurbel_achterdeur"
+    ]
+
+    // write all doorbells to off
+    for (const bel of doorbells) {
+        await client.publishAsync(`dopple_access/ringers/${bel}/doorbell`, "OFF");
+    }
+
+    // write all camera motion to off.
+    for (const camera of motionCamera) {
+        await client.publishAsync(`dopple_access/cameras/${camera}/motion`, "OFF");
+    }
+}
+
+const loopDoorUpdateFunction = async () => {
+    const doorbells = [
+        "deurbel_voordeur",
+        "deurbel_achterdeur"
+    ]
+
+    const motionCamera = [
+        "parkeerplaats_achter",
+        "deurbel_voordeur",
+        "hal",
+        "hal_lift",
+        "deurbel_achterdeur"
+    ]
+
+    // Randomize the chance of ringing the doorbell
+    for (const bel of doorbells) {
+        const random = Math.floor(Math.random() * 100);
+        if (random % 5 === 0) {
+            await client.publishAsync(`dopple_access/ringers/${bel}/doorbell`, "ON");
+            setTimeout(async () => {
+                await client.publishAsync(`dopple_access/ringers/${bel}/doorbell`, "OFF");
+            }, 15 * 1000);
+        }
+    }
+
+    // randomize the chance of seeing motion on the camera's
+    for (const camera of motionCamera) {
+        const random = Math.floor(Math.random() * 50);
+        if (random % 5 === 0) {
+            await client.publishAsync(`dopple_access/cameras/${camera}/motion`, "ON");
+            setTimeout(async () => {
+                await client.publishAsync(`dopple_access/cameras/${camera}/motion`, "OFF");
+            }, 3 * 1000);
+        }
     }
 }
 
@@ -183,6 +283,10 @@ client.on('connect', (conn_packet) => {
 
     // Once connected -> start looper
     loopController()
+    doorFunctionInitToOff().then(() => {
+        // start looper
+        doorLooper();
+    })
 });
 
 /**
@@ -194,12 +298,24 @@ client.on('disconnect', (conn_packet) => {
     if (looper_timeout) {
         clearTimeout(looper_timeout);
     }
+    if (door_looper_timeout) {
+        clearTimeout(door_looper_timeout);
+    }
+
 });
 
 /**
  * Setup the Windows support for using CTRL+C as a way to safely exit the program
  */
 if (process.platform === "win32") {
+    // var rl = require("readline").createInterface({
+    //     input: process.stdin,
+    //     output: process.stdout
+    // });
+
+    // rl.on("SIGINT", function () {
+    //     process.emit("SIGINT");
+    // });
     import("readline").then(readline => {
         const rl = readline.createInterface({
             input: process.stdin,
@@ -233,6 +349,17 @@ const loopController = () => {
             console.log(logtime(), "LOOPER_CRASHED", err.message)
         }).finally(() => {
             looper_timeout = setTimeout(loopController, DASHBOARD_FREQUENCY * 1000);
+        });
+    }
+}
+
+const doorLooper = () => {
+    if (mqtt_connected) {
+
+        loopDoorUpdateFunction().catch((err) => {
+            console.log(logtime(), "DOOR_LOOPER_CRASHED", err.message)
+        }).finally(() => {
+            door_looper_timeout = setTimeout(doorLooper, CAMERA_FREQUENCY * 1000);
         });
     }
 }

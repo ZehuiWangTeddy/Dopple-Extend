@@ -1,7 +1,13 @@
 .dopple-header {
     display: flex;
-    justify-content: space-between;
-    margin: 20px;
+    justify-content: space-between;    
+    position: fixed; /* Fix the header at the top */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: rgb(255, 255, 255); /* Ensure the header has a background color */
+    padding: 10px;
 }
 
 .dopple-header-time-date {

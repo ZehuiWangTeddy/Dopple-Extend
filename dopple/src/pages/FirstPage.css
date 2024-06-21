@@ -1,0 +1,57 @@
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 15px;
+     /* Prevent content from overflowing */
+}
+
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    background-color: #5d6f80;
+    
+}
+
+#cameraFeeds {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    height: 100%;
+    width: 100%;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+    margin-top: 30px;
+    padding-bottom: 30px;
+    grid-row: 5/6;
+}
+
+.open-door-button, .next-page-button {
+    width: 150px;
+    height: 55px;
+    font-size: 20px;
+    color: #fff;
+    background-color: #5d6f80;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.open-door-button:hover, .next-page-button:hover {
+    background-color: #33363F;
+}
