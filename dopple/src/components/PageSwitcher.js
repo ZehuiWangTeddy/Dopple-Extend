@@ -1,10 +1,11 @@
-// src/components/PageSwitcher.js
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useFeature } from '../contexts/FeatureContext';
 
 const PageSwitcher = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { features } = useFeature();
   const [focusTimeout, setFocusTimeout] = useState(null);
   const [userActionTimeout, setUserActionTimeout] = useState(null);
   const eventSourceRef = useRef(null);
@@ -13,7 +14,7 @@ const PageSwitcher = () => {
   useEffect(() => {
     const startAutoSwitchTimer = () => {
       autoSwitchIntervalRef.current = setInterval(() => {
-        if (!focusTimeout && !userActionTimeout) { // check if any camera isnt on focus or user performed any action
+        if (!focusTimeout && !userActionTimeout && features.AutoPageSwitch) {
           navigate(location.pathname === '/' ? '/stats' : '/');
         }
       }, 15000); // 15000 milliseconds = 15 seconds
@@ -26,7 +27,7 @@ const PageSwitcher = () => {
         clearInterval(autoSwitchIntervalRef.current);
       }
     };
-  }, [navigate, location.pathname, focusTimeout, userActionTimeout]);
+  }, [navigate, location.pathname, focusTimeout, userActionTimeout, features.AutoPageSwitch]);
 
   useEffect(() => {
     const resetUserActionTimeout = () => {
@@ -61,7 +62,7 @@ const PageSwitcher = () => {
       const eventMsg = `Doorbell ${door} event received with state: ${state}`;
       console.log(eventMsg);
 
-      if (state === 'ON') {
+      if (state === 'ON' && features.Doorbell) { // Check if Doorbell is enabled
         if (focusTimeout) {
           clearTimeout(focusTimeout);
         }
@@ -70,7 +71,7 @@ const PageSwitcher = () => {
 
         const timeout = setTimeout(() => {
           setFocusTimeout(null);
-        }, 40000); // Keep the camera in focus for 40 seconds
+        }, 40000); 
 
         setFocusTimeout(timeout);
       } else if (state === 'OFF') {
@@ -110,7 +111,7 @@ const PageSwitcher = () => {
         clearTimeout(focusTimeout);
       }
     };
-  }, [navigate, focusTimeout]);
+  }, [navigate, focusTimeout, features.Doorbell]);
 
   return null;
 };

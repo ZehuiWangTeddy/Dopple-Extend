@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import CameraPlayer from './CameraPlayer';
 import './CameraFeeds.css';
 import OpenDoor from '../OpenDoor';
+import { useFeature } from '../../contexts/FeatureContext';
 
 const cameraUrls = [
   process.env.REACT_APP_CAMERA_FRONT,
@@ -18,8 +19,11 @@ const CameraFeeds = () => {
   const [doorbellMessage, setDoorbellMessage] = useState('');
   const doorbellSoundRef = useRef(null);
   const eventSourceRef = useRef(null);
+  const { features } = useFeature();
 
   useEffect(() => {
+    if (!features.Doorbell) return;
+
     const triggeredCamera = localStorage.getItem('triggeredCamera');
     const doorbellState = localStorage.getItem('doorbellState');
 
@@ -61,7 +65,7 @@ const CameraFeeds = () => {
           setFocusedCamera(null);
           setFocusTimeout(null);
           setDoorbellMessage('');
-        }, 40000); // Keep the camera in focus for 40 seconds
+        }, 40000);
 
         setFocusTimeout(timeout);
       } else if (state === 'OFF') {
@@ -103,7 +107,7 @@ const CameraFeeds = () => {
         clearTimeout(focusTimeout);
       }
     };
-  }, [focusTimeout]);
+  }, [focusTimeout, features.Doorbell]);
 
   const stopFocus = () => {
     setFocusedCamera(null);

@@ -1,4 +1,5 @@
 import React from 'react';
+import eventEmitter from './utils/eventEmitter';
 
 const OpenDoor = ({ doorIndex, doorLabel, stopFocus }) => {
   const handleOpenDoor = (id) => {
@@ -24,15 +25,20 @@ const OpenDoor = ({ doorIndex, doorLabel, stopFocus }) => {
       .then((response) => response.json())
       .then((data) => {
         if (data.error === "PIN_INCORRECT") {
-          alert("Door opened");
+          eventEmitter.emit('toast', 'Door opened');
         } else {
-          alert("Door open failed");
+          eventEmitter.emit('toast', 'Door open failed');
         }
-        stopFocus(); // Stop focus after opening the door
+        if (stopFocus) {
+          stopFocus(); // Stop focus after opening the door
+        }
       })
       .catch((error) => {
         console.error("Failed to open door", error);
-        stopFocus(); // Ensure focus stops even if there's an error
+        eventEmitter.emit('toast', 'Failed to open door');
+        if (stopFocus) {
+          stopFocus();
+        }
       });
   };
 

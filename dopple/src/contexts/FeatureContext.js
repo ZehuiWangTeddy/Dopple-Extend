@@ -10,7 +10,9 @@ export const FeatureProvider = ({ children }) => {
         PrinterStatus: true,
         OperatorStatus: true,
         NetworkServices: true,
-        ChiselServer: true
+        ChiselServer: true,
+        Doorbell: true, 
+        AutoPageSwitch: true 
     };
 
     const [features, setFeatures] = useState(initialFeatures);

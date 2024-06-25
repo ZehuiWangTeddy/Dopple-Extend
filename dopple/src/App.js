@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import MainContainer from './components/MainContainer';
 import { FeatureProvider } from './contexts/FeatureContext';
+import ToastNotification from './components/ToastNotification'
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
         <Routes>
           <Route path="/*" element={<MainContainer />} />
         </Routes>
+        <ToastNotification />
       </BrowserRouter>
     </FeatureProvider>
   );
