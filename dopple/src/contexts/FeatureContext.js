@@ -5,7 +5,7 @@ const FeatureContext = createContext();
 export const useFeature = () => useContext(FeatureContext);
 
 export const FeatureProvider = ({ children }) => {
-    const initialFeatures = JSON.parse(localStorage.getItem('features')) || {
+    const initialFeatures = {
         OrderStatus: true,
         PrinterStatus: true,
         OperatorStatus: true,
