@@ -40,8 +40,8 @@
 
 .config-content table th {
     background-color: #5d6f80;
-    color: #fff;
-    font-size: 20px;
+    color: #000;
+    font-size: 25px;
 }
 
 .config-content table td {
